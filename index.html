@@ -45,7 +45,7 @@
             <h2 class="section-title">Overview</h2>
             <div class="experience">
                 <p>
-    The goal of this personal assistant, AKA "Winston", is to send a daily email with relevant information like upcoming birthdays and whether or not it is trash day.
+    The goal of this personal assistant, also known as  "Winston", is to send a daily email with relevant information like upcoming birthdays and whether or not it is trash day.
                 </p>
             </div>
         </div>
@@ -56,7 +56,99 @@
             <h2 class="section-title">dailyCorrespondence.py</h2>
             <div class="experience">
                 <pre><code>
-                    This is a test
+    ##########################################################################
+    # File: dailyCorrespondence.py
+    # Brief description: This file is meant to provide a daily email
+    #       in order to stay informed on various topics.
+    # Author: Michael J. Smith
+    ##########################################################################
+    
+    # Import statements
+    import func_composeMessage as cm
+    import func_email as em
+    import func_statusLogging as sl
+    import json
+    from datetime import datetime
+    
+    ##########################################################################
+    # Configuration
+    ##########################################################################
+    
+    # Note: Find the configuration items in config.json
+    with open('config.json', 'r') as file:
+        cnfg = json.loads(file.read())
+    
+        # Specify the platform from which the script is being run.
+        # Gmail access requires the use of an 'App Password'
+        # Passwords have been generated for the following platforms:
+        # 'iPhone','iPad','Mac','WindowsPhone','WindowsComp','Rasp'
+        platform  = cnfg['platform']
+    
+        # Toggle to True if you prefer the email is printed within the terminal
+        # window rather than being sent as an actual email.
+        emailInTerminal = cnfg['emailInTerminal'] == "True" # Bool conversion
+    
+        # Toggle print messages
+        verbose = cnfg['verbose'] == "True" # Bool conversion
+    
+        # File path to the log file
+        logFile = cnfg['logFile']
+    
+        # This specifies how the assistant will refer to theirself
+        assistantName = cnfg['assistantName']
+    
+    ##########################################################################
+    # Program logic
+    ##########################################################################
+    
+    start_time = datetime.now()
+    
+    #Initialize log file
+    sl.intializeLog()
+    
+    # Initialize the correspondence message
+    msg = cm.intializeMessage(verbose)
+    
+    # Expand the correspondence message
+    msg = cm.eventMessage(msg, verbose)
+    msg = cm.creditCardMessage(msg, verbose)
+    msg = cm.trashRecyclingMessage(msg, verbose)
+    
+    # Clos the correspondence message
+    msg = cm.valedictionMessage(msg, verbose)
+    
+    # Print email in terminal vs send email
+    sl.infoMessage("Final correspondence message\n{0}".format(msg),verbose)
+    if emailInTerminal:
+        print(msg)
+    else:
+        em.reportFindings(msg, verbose)
+    
+    # Print a final message to screen
+    end_time = datetime.now()
+    execution_time = end_time - start_time
+    sl.infoMessage("Successful program execution in {0} second(s).".format(execution_time.total_seconds()),verbose)
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">config.json</h2>
+            <div class="experience">
+                <pre><code>
+    {
+        "platform": "Mac",
+        "emailInTerminal": "True",
+        "verbose": "False",
+        "logFile": "log.txt",
+        "assistantName": "Winston",
+        "from_email": "assistant@gmail.com",
+        "to_email": "you@gmail.com",
+        "subject": "default"
+    }
+    
                 </code></pre>
             </div>
         </div>
@@ -68,7 +160,6 @@
             <div class="experience">
                 <pre><code>
     {
-        "updated": "05/23/2024",
         "gmailPassword": {
             "iPhone": "fakePassword",
             "iPad": "fakePassword",
@@ -78,6 +169,7 @@
             "Rasp": "fakePassword"
         }
     }
+    
                 </code></pre>
             </div>
         </div>
@@ -85,10 +177,2126 @@
 
     <section>
         <div class="container">
-            <h2 class="section-title">file3.py</h2>
+            <h2 class="section-title">history.json</h2>
             <div class="experience">
                 <pre><code>
-                    This is a test
+    {
+        "lastDeparture": "country",
+        "lastStateId": "0",
+        "lastCountryId": "0",
+        "lastWordId": "0",
+        "lastQuoteId": "0"
+    }
+    
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">func_composeMessage.py</h2>
+            <div class="experience">
+                <pre><code>
+    # Import statements
+    import json
+    import func_statusLogging as sl
+    
+    ##########################################################################
+    # Configuration
+    ##########################################################################
+    
+    with open('config.json', 'r') as file:
+        cnfg = json.loads(file.read())
+        assistantName = cnfg['assistantName']
+    
+    ##########################################################################
+    # Functions
+    ##########################################################################
+    
+    def intializeMessage(verbose):
+        '''
+        Starts the correspondence message string
+    
+        Input:
+            verbose (bool): Print additional terminal messages
+        Output:
+            msg (str): Text forming the body of the email correspondence
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'intializeMessage' function.",verbose)
+        
+        msg = "Good morning Mike,\n\n" + \
+            "Let me catch you up on some relevant information for today."
+    
+        return str(msg)
+    
+    def eventMessage(msg,verbose):
+        '''
+        Appends upcoming event information to the correspondence message
+    
+        Input:
+            msg (str): Text forming the body of the email correspondence
+            verbose (bool): Print additional terminal messages
+        Output:
+            msg (str): Text forming the body of the email correspondence
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'eventMessage' function.",verbose)
+    
+        return msg
+    
+    def creditCardMessage(msg,verbose):
+        '''
+        Appends upcoming credit card due date information to the correspondence message
+    
+        Input:
+            msg (str): Text forming the body of the email correspondence
+            verbose (bool): Print additional terminal messages
+        Output:
+            msg (str): Text forming the body of the email correspondence
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'creditCardMessage' function.",verbose)
+    
+        return msg
+    
+    def trashRecyclingMessage(msg,verbose):
+        '''
+        Appends upcoming trash and recycling day information to the correspondence message
+    
+        Input:
+            msg (str): Text forming the body of the email correspondence
+            verbose (bool): Print additional terminal messages
+        Output:
+            msg (str): Text forming the body of the email correspondence
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'trashRecyclingMessage' function.",verbose)
+    
+        return msg
+    
+    def valedictionMessage(msg,verbose):
+        '''
+        Closes the correspondence message
+    
+        Input:
+            msg (str): Text forming the body of the email correspondence
+            verbose (bool): Print additional terminal messages
+        Output:
+            msg (str): Text forming the body of the email correspondence
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'valedictionMessage' function.",verbose)
+    
+        departure,destination = getStateCountry(verbose)
+    
+        msg_addition = "Sincerely, {0}\n\n".format(assistantName) + \
+            "In route from {0} to {1}.\n\n".format(departure, destination) + \
+            "Word of the day:\n" + \
+            getWord(verbose) + "\n\n" + \
+            "Quote of the day:\n" + \
+            getQuote(verbose)
+        msg = msg + "\n\n" + msg_addition
+    
+        return msg
+    
+    def getStateCountry(verbose):
+        '''
+        Provide fake travel information to reinforce geography knowledge. The previous
+        day's destination becomes the current days departure location.
+    
+        Input:
+            verbose (bool): Print additional terminal messages
+        Output:
+            departure (str): State/Country and capital text to list in valediction
+            destination (str): State/Country and capital text to list in valediction
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'getStateCountry' function.",verbose)
+    
+        departure = ""
+        destination = ""
+    
+        with open('history.json', 'r') as histFile:
+            hist = json.loads(histFile.read())
+    
+        lastDeparture = hist['lastDeparture']
+        lastStateId = int(hist['lastStateId'])
+        lastCountryId = int(hist['lastCountryId'])
+        
+        if lastDeparture == "state":
+            departureId = lastCountryId
+            hist['lastDeparture'] = "country"
+            hist['lastCountryId'] = str(departureId)
+        else:
+            departureId = lastStateId
+            hist['lastDeparture'] = "state"
+            hist['lastStateId'] = str(departureId)
+        
+        with open('data_states.json', 'r') as stateFile:
+            st = json.loads(stateFile.read())
+            if lastDeparture == "state":
+                searching = True
+                destinationId = lastStateId + 1
+                while searching:
+                    while destinationId >= len(st["states"]):
+                        destinationId -= len(st["states"])
+                    if st["states"][destinationId]["skip"] == "no":
+                        searching = False
+                    else:
+                        destinationId += 1
+                hist['lastStateId'] = str(destinationId)
+                destination = "{0}, {1}".format(st["states"][destinationId]["capital"],st["states"][destinationId]["state"])
+            else:
+                departure = "{0}, {1}".format(st["states"][departureId]["capital"],st["states"][departureId]["state"])
+                
+        with open('data_countries.json', 'r') as countryFile:
+            cnrt = json.loads(countryFile.read())
+            if lastDeparture == "state":
+                departure = "{0}, {1}".format(cnrt["countries"][departureId]["capital"],cnrt["countries"][departureId]["short-form name"])
+            else:
+                searching = True
+                destinationId = lastCountryId + 1
+                while searching:
+                    while destinationId >= len(cnrt["countries"]):
+                        destinationId -= len(cnrt["countries"])
+                    if cnrt["countries"][destinationId]["skip"] == "no":
+                        searching = False
+                    else:
+                        destinationId += 1
+                hist['lastCountryId'] = str(destinationId)
+                destination = "{0}, {1}".format(cnrt["countries"][destinationId]["capital"],cnrt["countries"][destinationId]["short-form name"])
+        
+        with open('history.json', 'w') as histFile:
+            json.dump(hist, histFile, indent=4)
+        
+        return departure,destination
+    
+    def getWord(verbose):
+        '''
+        Determines the next word of the day and provides a string to place
+        into the daily correspondence email.
+    
+        Input:
+            verbose (bool): Print additional terminal messages
+        Output:
+            wotd (str): Word of the day text
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'getWord' function.",verbose)
+    
+        wotd = ""
+    
+        with open('history.json', 'r') as histFile:
+            hist = json.loads(histFile.read())
+    
+        lastWordId = int(hist['lastWordId'])
+                
+        with open('data_words.json', 'r') as wordsFile:
+            wrd = json.loads(wordsFile.read())
+    
+            searching = True
+            wordId = lastWordId + 1
+            while searching:
+                while wordId >= len(wrd["words"]):
+                    wordId -= len(wrd["words"])
+                if wrd["words"][wordId]["skip"] == "no":
+                    searching = False
+                else:
+                    wordId += 1
+            hist['lastWordId'] = str(wordId)
+            wotd = "{0} ({1}): {2}\nSentence: \"{3}\"".format(wrd["words"][wordId]["word"],wrd["words"][wordId]["part of speech"],wrd["words"][wordId]["definition"],wrd["words"][wordId]["sentence"])
+        
+        with open('history.json', 'w') as histFile:
+            json.dump(hist, histFile, indent=4)
+        
+        return wotd
+    
+    def getQuote(verbose):
+        '''
+        Determines the next quote of the day and provides a string to place
+        into the daily correspondence email.
+    
+        Input:
+            verbose (bool): Print additional terminal messages
+        Output:
+            qotd (str): Quote of the day text
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'getQuote' function.",verbose)
+    
+        qotd = ""
+    
+        with open('history.json', 'r') as histFile:
+            hist = json.loads(histFile.read())
+    
+        lastQuoteId = int(hist['lastQuoteId'])
+                
+        with open('data_quotes.json', 'r') as quotesFile:
+            qt = json.loads(quotesFile.read())
+    
+            searching = True
+            quoteId = lastQuoteId + 1
+            while searching:
+                while quoteId >= len(qt["quotes"]):
+                    quoteId -= len(qt["quotes"])
+                if qt["quotes"][quoteId]["skip"] == "no":
+                    searching = False
+                else:
+                    quoteId += 1
+            hist['lastQuoteId'] = str(quoteId)
+            qotd = "{0} ({1})".format(qt["quotes"][quoteId]["quote"],qt["quotes"][quoteId]["author"])
+        
+        with open('history.json', 'w') as histFile:
+            json.dump(hist, histFile, indent=4)
+        
+        return qotd
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">func_email.py</h2>
+            <div class="experience">
+                <pre><code>
+    # Import statements
+    import json
+    import smtplib
+    import datetime as datetime
+    import func_statusLogging as sl
+    
+    ##########################################################################
+    # Configuration
+    ##########################################################################
+    
+    with open('config.json', 'r') as file:
+        cnfg = json.loads(file.read())
+        platform = cnfg['platform']
+        emailInTerminal = cnfg['emailInTerminal'] == "True" # Bool conversion
+        verbose = cnfg['verbose'] == "True" # Bool conversion
+        logFile = cnfg['logFile']
+        assistantName = cnfg['assistantName']
+        from_email = cnfg['from_email']
+        to_email = cnfg['to_email']
+        subject = cnfg['subject']
+    
+    ##########################################################################
+    # Functions
+    ##########################################################################
+    
+    def reportFindings(msg,verbose):
+        '''
+        Send correspondence via email
+    
+        Input:
+            msg (str): Text forming the body of the email correspondence
+            verbose (bool): Print additional terminal messages
+        Output:
+            n/a
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'reportFindings' function.",verbose)
+    
+        subject = cnfg['subject']
+    
+        if subject == "default":
+            subject = "Daily Correspondence ({0})".format(datetime.datetime.now().strftime("%Y-%m-%d"))
+    
+        smtpserver = smtplib.SMTP("smtp.gmail.com",587)
+        smtpserver.ehlo()
+        smtpserver.starttls()
+        smtpserver.ehlo
+        smtpserver.login(from_email,get_pass(platform,verbose))
+        header = "To: " + to_email + "\nFrom: " + from_email
+        header = header + "\nSubject: " + subject + "\n"
+        URGENT_MESSAGE = header + "\n" + msg
+        smtpserver.sendmail(from_email,to_email,URGENT_MESSAGE)
+        smtpserver.close()
+    
+        return
+    
+    def get_pass(platform,verbose):
+        '''
+        Send correspondence via email
+    
+        Input:
+            platform (str): Platform the program is running on
+            verbose (bool): Print additional terminal messages
+        Output:
+            pw (str): Gmail password for the requested platform
+        '''
+    
+        if verbose: sl.progressMessage("Starting the 'get_pass' function.",verbose)
+    
+        pw = ''
+        with open('protectedInfo.json', 'r') as file:
+            pInfo = json.loads(file.read())
+            pw = pInfo['gmailPassword'][platform]
+        return pw
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">func_statusLogging.py</h2>
+            <div class="experience">
+                <pre><code>
+    # Import statements
+    import json
+    import os
+    from datetime import datetime
+    
+    ##########################################################################
+    # Configuration
+    ##########################################################################
+    
+    with open('config.json', 'r') as file:
+        cnfg = json.loads(file.read())
+        logFile = cnfg['logFile']
+    
+    ##########################################################################
+    # Functions
+    ##########################################################################
+    
+    def intializeLog():
+        """
+        Creates a new log file or clears the contents of the existing log file.
+        
+        Input:
+            n/a
+        Output:
+            n/a
+        """
+    
+        try:
+            with open(logFile, 'w') as f:
+                f.write("Program initialized: {0}".format(datetime.now()))
+        except Exception as e:
+            errorMessage(f"An error occurred initializing the log file: {e}")
+        
+        return
+    
+    def errorMessage(txt,verbose):
+        '''
+        Prints an Error message in the log file
+    
+        Input:
+            msg (str): Error message text
+            verbose (bool): Print additional terminal messages
+        Output:
+            n/a
+        '''
+    
+        if verbose: print("\nERROR: {0}".format(txt))
+    
+        with open(logFile, 'a') as f:
+            f.write("\nERROR: {0}".format(txt))
+    
+        return
+    
+    def infoMessage(txt,verbose):
+        '''
+        Prints an Info message in the log file
+    
+        Input:
+            txt (str): Info message text
+            verbose (bool): Print additional terminal messages
+        Output:
+            n/a
+        '''
+    
+        try:
+            with open(logFile, 'a') as f:
+                f.write("\nINFO: {0}".format(txt))
+        except Exception as e:
+            errorMessage(f"An error occurred logging an info message: {e}")
+        
+        return
+    
+    def progressMessage(txt,verbose):
+        '''
+        Prints an Info message in the log file
+    
+        Input:
+            txt (str): Info message text
+            verbose (bool): Print additional terminal messages
+        Output:
+            n/a
+        '''
+    
+        if verbose:
+            try:
+                with open(logFile, 'a') as f:
+                    f.write("\nProgress: {0}".format(txt))
+            except Exception as e:
+                errorMessage(f"An error occurred logging a progress message: {e}")
+        
+        return
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">data_countries.json</h2>
+            <div class="experience">
+                <pre><code>
+    {
+        "countries": [
+            {
+                "short-form name": "Afghanistan",
+                "long-form name": "Islamic Republic of Afghanistan",
+                "capital": "Kabul",
+                "skip": "yes"
+            },
+            {
+                "short-form name": "Albania",
+                "long-form name": "Republic of Albania",
+                "capital": "Tirana",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Algeria",
+                "long-form name": "People's Democratic Republic of Algeria",
+                "capital": "Algiers",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Andorra",
+                "long-form name": "Principality of Andorra",
+                "capital": "Andorra la Vella",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Angola",
+                "long-form name": "Republic of Angola",
+                "capital": "Luanda",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Antigua and Barbuda",
+                "long-form name": "Antigua and Barbuda",
+                "capital": "Saint John's",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Argentina",
+                "long-form name": "Argentine Republic",
+                "capital": "Buenos Aires",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Armenia",
+                "long-form name": "Republic of Armenia",
+                "capital": "Yerevan",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Australia",
+                "long-form name": "Commonwealth of Australia",
+                "capital": "Canberra",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Austria",
+                "long-form name": "Republic of Austria",
+                "capital": "Vienna",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Azerbaijan",
+                "long-form name": "Republic of Azerbaijan",
+                "capital": "Baku",
+                "skip": "no"
+            },
+            {
+                "short-form name": "The Bahamas",
+                "long-form name": "Commonwealth of The Bahamas",
+                "capital": "Nassau",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bahrain",
+                "long-form name": "Kingdom of Bahrain",
+                "capital": "Manama",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bangladesh",
+                "long-form name": "People's Republic of Bangladesh",
+                "capital": "Dhaka",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Barbados",
+                "long-form name": "Barbados",
+                "capital": "Bridgetown",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Belarus",
+                "long-form name": "Republic of Belarus",
+                "capital": "Minsk",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Belgium",
+                "long-form name": "Kingdom of Belgium",
+                "capital": "Brussels",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Belize",
+                "long-form name": "Belize",
+                "capital": "Belmopan",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Benin",
+                "long-form name": "Republic of Benin",
+                "capital": "Porto-Novo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bhutan",
+                "long-form name": "Kingdom of Bhutan",
+                "capital": "Thimphu",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bolivia",
+                "long-form name": "Plurinational State of Bolivia",
+                "capital": "La Paz",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bosnia and Herzegovina",
+                "long-form name": "Bosnia and Herzegovina",
+                "capital": "Sarajevo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Botswana",
+                "long-form name": "Republic of Botswana",
+                "capital": "Gaborone",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Brazil",
+                "long-form name": "Federative Republic of Brazil",
+                "capital": "Brasília",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Brunei",
+                "long-form name": "Brunei Darussalam",
+                "capital": "Bandar Seri Begawan",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Bulgaria",
+                "long-form name": "Republic of Bulgaria",
+                "capital": "Sofia",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Burkina Faso",
+                "long-form name": "Burkina Faso",
+                "capital": "Ouagadougou",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Burma",
+                "long-form name": "Union of Burma",
+                "capital": "Rangoon",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Burundi",
+                "long-form name": "Republic of Burundi",
+                "capital": "Bujumbura",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Cabo Verde",
+                "long-form name": "Republic of Cabo Verde",
+                "capital": "Praia",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Cambodia",
+                "long-form name": "Kingdom of Cambodia",
+                "capital": "Phnom Penh",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Cameroon",
+                "long-form name": "Republic of Cameroon",
+                "capital": "Yaoundé",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Canada",
+                "long-form name": "Canada",
+                "capital": "Ottawa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Central African Republic",
+                "long-form name": "Central African Republic",
+                "capital": "Bangui",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Chad",
+                "long-form name": "Republic of Chad",
+                "capital": "N'Djamena",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Chile",
+                "long-form name": "Republic of Chile",
+                "capital": "Santiago",
+                "skip": "no"
+            },
+            {
+                "short-form name": "China",
+                "long-form name": "People's Republic of China",
+                "capital": "Beijing",
+                "skip": "yes"
+            },
+            {
+                "short-form name": "Colombia",
+                "long-form name": "Republic of Colombia",
+                "capital": "Bogotá",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Comoros",
+                "long-form name": "Union of the Comoros",
+                "capital": "Moroni",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Congo",
+                "long-form name": "Republic of the Congo",
+                "capital": "Brazzaville",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Congo",
+                "long-form name": "Democratic Republic of the Congo",
+                "capital": "Kinshasa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Costa Rica",
+                "long-form name": "Republic of Costa Rica",
+                "capital": "San José",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Côte d'Ivoire",
+                "long-form name": "Republic of Côte d'Ivoire",
+                "capital": "Yamoussoukro",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Croatia",
+                "long-form name": "Republic of Croatia",
+                "capital": "Zagreb",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Cuba",
+                "long-form name": "Republic of Cuba",
+                "capital": "Havana",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Cyprus",
+                "long-form name": "Republic of Cyprus",
+                "capital": "Nicosia",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Czechia",
+                "long-form name": "Czech Republic",
+                "capital": "Prague",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Denmark",
+                "long-form name": "Kingdom of Denmark",
+                "capital": "Copenhagen",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Djibouti",
+                "long-form name": "Republic of Djibouti",
+                "capital": "Djibouti",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Dominica",
+                "long-form name": "Commonwealth of Dominica",
+                "capital": "Roseau",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Dominican Republic",
+                "long-form name": "Dominican Republic",
+                "capital": "Santo Domingo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Ecuador",
+                "long-form name": "Republic of Ecuador",
+                "capital": "Quito",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Egypt",
+                "long-form name": "Arab Republic of Egypt",
+                "capital": "Cairo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "El Salvador",
+                "long-form name": "Republic of El Salvador",
+                "capital": "San Salvador",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Equatorial Guinea",
+                "long-form name": "Republic of Equatorial Guinea",
+                "capital": "Malabo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Eritrea",
+                "long-form name": "State of Eritrea",
+                "capital": "Asmara",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Estonia",
+                "long-form name": "Republic of Estonia",
+                "capital": "Tallinn",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Eswatini",
+                "long-form name": "Kingdom of Eswatini",
+                "capital": "Mbabane",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Ethiopia",
+                "long-form name": "Federal Democratic Republic of Ethiopia",
+                "capital": "Addis Ababa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Fiji",
+                "long-form name": "Republic of Fiji",
+                "capital": "Suva",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Finland",
+                "long-form name": "Republic of Finland",
+                "capital": "Helsinki",
+                "skip": "no"
+            },
+            {
+                "short-form name": "France",
+                "long-form name": "French Republic",
+                "capital": "Paris",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Gabon",
+                "long-form name": "Gabonese Republic",
+                "capital": "Libreville",
+                "skip": "no"
+            },
+            {
+                "short-form name": "The Gambia",
+                "long-form name": "Republic of The Gambia",
+                "capital": "Banjul",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Georgia",
+                "long-form name": "Georgia",
+                "capital": "Tbilisi",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Germany",
+                "long-form name": "Federal Republic of Germany",
+                "capital": "Berlin",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Ghana",
+                "long-form name": "Republic of Ghana",
+                "capital": "Accra",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Greece",
+                "long-form name": "Hellenic Republic",
+                "capital": "Athens",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Grenada",
+                "long-form name": "Grenada",
+                "capital": "Saint George's",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Guatemala",
+                "long-form name": "Republic of Guatemala",
+                "capital": "Guatemala City",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Guinea",
+                "long-form name": "Republic of Guinea",
+                "capital": "Conakry",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Guinea-Bissau",
+                "long-form name": "Republic of Guinea-Bissau",
+                "capital": "Bissau",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Guyana",
+                "long-form name": "Co-operative Republic of Guyana",
+                "capital": "Georgetown",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Haiti",
+                "long-form name": "Republic of Haiti",
+                "capital": "Port-au-Prince",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Holy See",
+                "long-form name": "Holy See",
+                "capital": "Vatican City",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Honduras",
+                "long-form name": "Republic of Honduras",
+                "capital": "Tegucigalpa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Hungary",
+                "long-form name": "Hungary",
+                "capital": "Budapest",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Iceland",
+                "long-form name": "Republic of Iceland",
+                "capital": "Reykjavík",
+                "skip": "no"
+            },
+            {
+                "short-form name": "India",
+                "long-form name": "Republic of India",
+                "capital": "New Delhi",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Indonesia",
+                "long-form name": "Republic of Indonesia",
+                "capital": "Jakarta",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Iran",
+                "long-form name": "Islamic Republic of Iran",
+                "capital": "Tehran",
+                "skip": "yes"
+            },
+            {
+                "short-form name": "Iraq",
+                "long-form name": "Republic of Iraq",
+                "capital": "Baghdad",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Ireland",
+                "long-form name": "Ireland",
+                "capital": "Dublin",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Israel",
+                "long-form name": "State of Israel",
+                "capital": "Jerusalem",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Italy",
+                "long-form name": "Italian Republic",
+                "capital": "Rome",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Jamaica",
+                "long-form name": "Jamaica",
+                "capital": "Kingston",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Japan",
+                "long-form name": "Japan",
+                "capital": "Tokyo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Jordan",
+                "long-form name": "Hashemite Kingdom of Jordan",
+                "capital": "Amman",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kazakhstan",
+                "long-form name": "Republic of Kazakhstan",
+                "capital": "Nur-Sultan",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kenya",
+                "long-form name": "Republic of Kenya",
+                "capital": "Nairobi",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kiribati",
+                "long-form name": "Republic of Kiribati",
+                "capital": "Tarawa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "North Korea",
+                "long-form name": "Democratic People's Republic of Korea",
+                "capital": "Pyongyang",
+                "skip": "yes"
+            },
+            {
+                "short-form name": "South Korea",
+                "long-form name": "Republic of Korea",
+                "capital": "Seoul",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kosovo",
+                "long-form name": "Republic of Kosovo",
+                "capital": "Pristina",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kuwait",
+                "long-form name": "State of Kuwait",
+                "capital": "Kuwait City",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Kyrgyzstan",
+                "long-form name": "Kyrgyz Republic",
+                "capital": "Bishkek",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Laos",
+                "long-form name": "Lao People's Democratic Republic",
+                "capital": "Vientiane",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Latvia",
+                "long-form name": "Republic of Latvia",
+                "capital": "Riga",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Lebanon",
+                "long-form name": "Lebanese Republic",
+                "capital": "Beirut",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Lesotho",
+                "long-form name": "Kingdom of Lesotho",
+                "capital": "Maseru",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Liberia",
+                "long-form name": "Republic of Liberia",
+                "capital": "Monrovia",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Libya",
+                "long-form name": "State of Libya",
+                "capital": "Tripoli",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Liechtenstein",
+                "long-form name": "Principality of Liechtenstein",
+                "capital": "Vaduz",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Lithuania",
+                "long-form name": "Republic of Lithuania",
+                "capital": "Vilnius",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Luxembourg",
+                "long-form name": "Grand Duchy of Luxembourg",
+                "capital": "Luxembourg",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Madagascar",
+                "long-form name": "Republic of Madagascar",
+                "capital": "Antananarivo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Malawi",
+                "long-form name": "Republic of Malawi",
+                "capital": "Lilongwe",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Malaysia",
+                "long-form name": "Malaysia",
+                "capital": "Kuala Lumpur",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Maldives",
+                "long-form name": "Republic of Maldives",
+                "capital": "Male",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mali",
+                "long-form name": "Republic of Mali",
+                "capital": "Bamako",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Malta",
+                "long-form name": "Republic of Malta",
+                "capital": "Valletta",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Marshall Islands",
+                "long-form name": "Republic of the Marshall Islands",
+                "capital": "Majuro",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mauritania",
+                "long-form name": "Islamic Republic of Mauritania",
+                "capital": "Nouakchott",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mauritius",
+                "long-form name": "Republic of Mauritius",
+                "capital": "Port Louis",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mexico",
+                "long-form name": "United Mexican States",
+                "capital": "Mexico City",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Federated States of Micronesia",
+                "long-form name": "Federated States of Micronesia",
+                "capital": "Palikir",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Moldova",
+                "long-form name": "Republic of Moldova",
+                "capital": "Chisinau",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Monaco",
+                "long-form name": "Principality of Monaco",
+                "capital": "Monaco",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mongolia",
+                "long-form name": "Mongolia",
+                "capital": "Ulaanbaatar",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Montenegro",
+                "long-form name": "Montenegro",
+                "capital": "Podgorica",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Morocco",
+                "long-form name": "Kingdom of Morocco",
+                "capital": "Rabat",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Mozambique",
+                "long-form name": "Republic of Mozambique",
+                "capital": "Maputo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Namibia",
+                "long-form name": "Republic of Namibia",
+                "capital": "Windhoek",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Nauru",
+                "long-form name": "Republic of Nauru",
+                "capital": "Yaren District",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Nepal",
+                "long-form name": "Nepal",
+                "capital": "Kathmandu",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Netherlands",
+                "long-form name": "Kingdom of the Netherlands",
+                "capital": "Amsterdam",
+                "skip": "no"
+            },
+            {
+                "short-form name": "New Zealand",
+                "long-form name": "New Zealand",
+                "capital": "Wellington",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Nicaragua",
+                "long-form name": "Republic of Nicaragua",
+                "capital": "Managua",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Niger",
+                "long-form name": "Republic of Niger",
+                "capital": "Niamey",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Nigeria",
+                "long-form name": "Federal Republic of Nigeria",
+                "capital": "Abuja",
+                "skip": "no"
+            },
+            {
+                "short-form name": "North Macedonia",
+                "long-form name": "Republic of North Macedonia",
+                "capital": "Skopje",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Norway",
+                "long-form name": "Kingdom of Norway",
+                "capital": "Oslo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Oman",
+                "long-form name": "Sultanate of Oman",
+                "capital": "Muscat",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Pakistan",
+                "long-form name": "Islamic Republic of Pakistan",
+                "capital": "Islamabad",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Palau",
+                "long-form name": "Republic of Palau",
+                "capital": "Ngerulmud",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Panama",
+                "long-form name": "Republic of Panama",
+                "capital": "Panama City",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Papua New Guinea",
+                "long-form name": "Independent State of Papua New Guinea",
+                "capital": "Port Moresby",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Paraguay",
+                "long-form name": "Republic of Paraguay",
+                "capital": "Asunción",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Peru",
+                "long-form name": "Republic of Peru",
+                "capital": "Lima",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Philippines",
+                "long-form name": "Republic of the Philippines",
+                "capital": "Manila",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Poland",
+                "long-form name": "Republic of Poland",
+                "capital": "Warsaw",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Portugal",
+                "long-form name": "Portuguese Republic",
+                "capital": "Lisbon",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Qatar",
+                "long-form name": "State of Qatar",
+                "capital": "Doha",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Romania",
+                "long-form name": "Romania",
+                "capital": "Bucharest",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Russia",
+                "long-form name": "Russian Federation",
+                "capital": "Moscow",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Rwanda",
+                "long-form name": "Republic of Rwanda",
+                "capital": "Kigali",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Saint Kitts and Nevis",
+                "long-form name": "Federation of Saint Kitts and Nevis",
+                "capital": "Basseterre",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Saint Lucia",
+                "long-form name": "Saint Lucia",
+                "capital": "Castries",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Saint Vincent and the Grenadines",
+                "long-form name": "Saint Vincent and the Grenadines",
+                "capital": "Kingstown",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Samoa",
+                "long-form name": "Independent State of Samoa",
+                "capital": "Apia",
+                "skip": "no"
+            },
+            {
+                "short-form name": "San Marino",
+                "long-form name": "Republic of San Marino",
+                "capital": "San Marino",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Sao Tome and Principe",
+                "long-form name": "Democratic Republic of Sao Tome and Principe",
+                "capital": "São Tomé",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Saudi Arabia",
+                "long-form name": "Kingdom of Saudi Arabia",
+                "capital": "Riyadh",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Senegal",
+                "long-form name": "Republic of Senegal",
+                "capital": "Dakar",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Serbia",
+                "long-form name": "Republic of Serbia",
+                "capital": "Belgrade",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Seychelles",
+                "long-form name": "Republic of Seychelles",
+                "capital": "Victoria",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Sierra Leone",
+                "long-form name": "Republic of Sierra Leone",
+                "capital": "Freetown",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Singapore",
+                "long-form name": "Republic of Singapore",
+                "capital": "Singapore",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Slovakia",
+                "long-form name": "Slovak Republic",
+                "capital": "Bratislava",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Slovenia",
+                "long-form name": "Republic of Slovenia",
+                "capital": "Ljubljana",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Solomon Islands",
+                "long-form name": "Solomon Islands",
+                "capital": "Honiara",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Somalia",
+                "long-form name": "Federal Republic of Somalia",
+                "capital": "Mogadishu",
+                "skip": "no"
+            },
+            {
+                "short-form name": "South Africa",
+                "long-form name": "Republic of South Africa",
+                "capital": "Pretoria",
+                "skip": "no"
+            },
+            {
+                "short-form name": "South Sudan",
+                "long-form name": "Republic of South Sudan",
+                "capital": "Juba",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Spain",
+                "long-form name": "Kingdom of Spain",
+                "capital": "Madrid",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Sri Lanka",
+                "long-form name": "Democratic Socialist Republic of Sri Lanka",
+                "capital": "Colombo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Sudan",
+                "long-form name": "Republic of the Sudan",
+                "capital": "Khartoum",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Suriname",
+                "long-form name": "Republic of Suriname",
+                "capital": "Paramaribo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Sweden",
+                "long-form name": "Kingdom of Sweden",
+                "capital": "Stockholm",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Switzerland",
+                "long-form name": "Swiss Confederation",
+                "capital": "Bern",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Syria",
+                "long-form name": "Syrian Arab Republic",
+                "capital": "Damascus",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Taiwan",
+                "long-form name": "Taiwan",
+                "capital": "Taipei",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Tajikistan",
+                "long-form name": "Republic of Tajikistan",
+                "capital": "Dushanbe",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Tanzania",
+                "long-form name": "United Republic of Tanzania",
+                "capital": "Dar es Salaam",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Thailand",
+                "long-form name": "Kingdom of Thailand",
+                "capital": "Bangkok",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Timor-Leste",
+                "long-form name": "Democratic Republic of Timor-Leste",
+                "capital": "Dili",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Togo",
+                "long-form name": "Togolese Republic",
+                "capital": "Lomé",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Tonga",
+                "long-form name": "Kingdom of Tonga",
+                "capital": "Nuku'alofa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Trinidad and Tobago",
+                "long-form name": "Republic of Trinidad and Tobago",
+                "capital": "Port of Spain",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Tunisia",
+                "long-form name": "Republic of Tunisia",
+                "capital": "Tunis",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Turkey",
+                "long-form name": "Republic of Turkey",
+                "capital": "Ankara",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Turkmenistan",
+                "long-form name": "Turkmenistan",
+                "capital": "Ashgabat",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Tuvalu",
+                "long-form name": "Tuvalu",
+                "capital": "Funafuti",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Uganda",
+                "long-form name": "Republic of Uganda",
+                "capital": "Kampala",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Ukraine",
+                "long-form name": "Ukraine",
+                "capital": "Kyiv",
+                "skip": "no"
+            },
+            {
+                "short-form name": "United Arab Emirates",
+                "long-form name": "United Arab Emirates",
+                "capital": "Abu Dhabi",
+                "skip": "no"
+            },
+            {
+                "short-form name": "United Kingdom",
+                "long-form name": "United Kingdom of Great Britain and Northern Ireland",
+                "capital": "London",
+                "skip": "no"
+            },
+            {
+                "short-form name": "United States",
+                "long-form name": "United States of America",
+                "capital": "Washington, DC",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Uruguay",
+                "long-form name": "Oriental Republic of Uruguay",
+                "capital": "Montevideo",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Uzbekistan",
+                "long-form name": "Republic of Uzbekistan",
+                "capital": "Tashkent",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Vanuatu",
+                "long-form name": "Republic of Vanuatu",
+                "capital": "Port-Vila",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Venezuela",
+                "long-form name": "Bolivarian Republic of Venezuela",
+                "capital": "Caracas",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Vietnam",
+                "long-form name": "Socialist Republic of Vietnam",
+                "capital": "Hanoi",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Yemen",
+                "long-form name": "Republic of Yemen",
+                "capital": "Sanaa",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Zambia",
+                "long-form name": "Republic of Zambia",
+                "capital": "Lusaka",
+                "skip": "no"
+            },
+            {
+                "short-form name": "Zimbabwe",
+                "long-form name": "Republic of Zimbabwe",
+                "capital": "Harare",
+                "skip": "no"
+            }
+        ]
+    }
+    
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">data_quotes.json</h2>
+            <div class="experience">
+                <pre><code>
+    {
+        "quotes": [
+            {
+                "quote": "Speak softly and carry a big stick; you will go far.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "Never throughout history has a man who lived a life of ease left a name worth remembering.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "Do what you can, with what you have, where you are.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "Keep your eyes on the stars, and your feet on the ground.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "To educate a man in mind and not in morals is to educate a menace to society.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "It is hard to fail, but it is worse never to have tried to succeed.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "In any moment of decision, the best thing you can do is the right thing, the next best thing is the wrong thing, and the worst thing you can do is nothing.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "I'm cool with failing so long as I know that there are people around me that love me unconditionally.",
+                "author": "Dave Chappelle",
+                "skip": "no"
+            },
+            {
+                "quote": "The hardest thing to do is to be true to yourself, especially when everybody is watching.",
+                "author": "Dave Chappelle",
+                "skip": "no"
+            },
+            {
+                "quote": "You know you must be doing something right if old people like you.",
+                "author": "Dave Chappelle",
+                "skip": "no"
+            },
+            {
+                "quote": "The worst thing to call somebody is crazy. It's dismissive.",
+                "author": "Dave Chappelle",
+                "skip": "no"
+            },
+            {
+                "quote": "To reach a port, we must sail - sail, not tie at anchor - sail, not drift.",
+                "author": "Franklin D. Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "You must be the change you wish to see in the world.",
+                "author": "Mahatma Gandhi",
+                "skip": "no"
+            },
+            {
+                "quote": "When a measure becomes a target, it ceases to be a good measure.",
+                "author": "Goodhart's Law",
+                "skip": "no"
+            },
+            {
+                "quote": "The best way to predict the future is to invent it.",
+                "author": "Alan Kay, computer scientist and Digital Advisor at Microsoft",
+                "skip": "no"
+            },
+            {
+                "quote": "Neat phrases make powerful weapons.",
+                "author": "Leil Lowndes",
+                "skip": "no"
+            },
+            {
+                "quote": "The road to hell is paved with good intentions.",
+                "author": "Proverb",
+                "skip": "no"
+            },
+            {
+                "quote": "Don't take criticism from people you would never go to for advice.",
+                "author": "Jim Kwik",
+                "skip": "no"
+            },
+            {
+                "quote": "We shall overcome because the arc of the moral universe is long but it bends toward justice.",
+                "author": "Dr. Martin Luther King Jr.",
+                "skip": "no"
+            },
+            {
+                "quote": "Hard work beats talent when talent doesn't work hard.",
+                "author": "Tim Notke, a high school basketball coach (popularized by Kevin Durant)",
+                "skip": "no"
+            },
+            {
+                "quote": "Courage is grace under pressure.",
+                "author": "Ernest Hemingway",
+                "skip": "no"
+            },
+            {
+                "quote": "You can do anything, but not everything.",
+                "author": "David Allen, a well-known thinker on personal productivity",
+                "skip": "no"
+            },
+            {
+                "quote": "An expert is a person who has made all the mistakes that can be made in a very narrow field.",
+                "author": "Niels Bohr",
+                "skip": "no"
+            },
+            {
+                "quote": "What does not kill me makes me stronger.",
+                "author": "Friedrich Nietzche",
+                "skip": "no"
+            },
+            {
+                "quote": "When elephants fight, it's the grass that suffers.",
+                "author": "African proverb",
+                "skip": "no"
+            },
+            {
+                "quote": "The problem with the world is that the intelligent people are full of doubts and the stupid ones are full of confidence.",
+                "author": "Charles Bukewski",
+                "skip": "no"
+            },
+            {
+                "quote": "Men are not prisoners of fate, but only prisoners of their own minds.",
+                "author": "Franklin D. Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "Tame the savageness of man and make gentle the life of this world.",
+                "author": "Aeschylus",
+                "skip": "no"
+            },
+            {
+                "quote": "It is not the critic who counts; not the man who points out how the strong man stumbles, or where the doer of deeds could have done them better. The credit belongs to the man who is actually in the arena, whose face is marred by dust and sweat and blood; who strives valiantly; who errs, who comes short again and again, because there is no effort without error and shortcoming; but who does actually strive to do the deeds; who knows great enthusiasms, the great devotions; who spends himself in a worthy cause; who at the best knows in the end the triumph of high achievement, and who at the worst, if he fails, at least fails while daring greatly, so that his place shall never be with those cold and timid souls who neither know victory nor defeat.",
+                "author": "Theodore Roosevelt",
+                "skip": "no"
+            },
+            {
+                "quote": "Attention is the beginning of devotion.",
+                "author": "Mary Oliver",
+                "skip": "no"
+            },
+            {
+                "quote": "Because when you find beauty, you find inspiration.",
+                "author": "Vincent Van Gogh",
+                "skip": "no"
+            },
+            {
+                "quote": "Reforms should not be made until the reasoning behind the existing state of affairs is understood.",
+                "author": "Chesterton's fence",
+                "skip": "no"
+            }
+        ]
+    }
+    
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">data_states.json</h2>
+            <div class="experience">
+                <pre><code>
+    {
+        "states": [
+            {
+                "state": "Alabama",
+                "capital": "Montgomery",
+                "skip": "no"
+            },
+            {
+                "state": "Alaska",
+                "capital": "Juneau",
+                "skip": "no"
+            },
+            {
+                "state": "Arizona",
+                "capital": "Phoenix",
+                "skip": "no"
+            },
+            {
+                "state": "Arkansas",
+                "capital": "Little Rock",
+                "skip": "no"
+            },
+            {
+                "state": "California",
+                "capital": "Sacramento",
+                "skip": "no"
+            },
+            {
+                "state": "Colorado",
+                "capital": "Denver",
+                "skip": "no"
+            },
+            {
+                "state": "Connecticut",
+                "capital": "Hartford",
+                "skip": "no"
+            },
+            {
+                "state": "Delaware",
+                "capital": "Dover",
+                "skip": "no"
+            },
+            {
+                "state": "Florida",
+                "capital": "Tallahassee",
+                "skip": "no"
+            },
+            {
+                "state": "Georgia",
+                "capital": "Atlanta",
+                "skip": "no"
+            },
+            {
+                "state": "Hawaii",
+                "capital": "Honolulu",
+                "skip": "no"
+            },
+            {
+                "state": "Idaho",
+                "capital": "Boise",
+                "skip": "no"
+            },
+            {
+                "state": "Illinois",
+                "capital": "Springfield",
+                "skip": "no"
+            },
+            {
+                "state": "Indiana",
+                "capital": "Indianapolis",
+                "skip": "no"
+            },
+            {
+                "state": "Iowa",
+                "capital": "Des Moines",
+                "skip": "no"
+            },
+            {
+                "state": "Kansas",
+                "capital": "Topeka",
+                "skip": "no"
+            },
+            {
+                "state": "Kentucky",
+                "capital": "Frankfort",
+                "skip": "no"
+            },
+            {
+                "state": "Louisiana",
+                "capital": "Baton Rouge",
+                "skip": "no"
+            },
+            {
+                "state": "Maine",
+                "capital": "Augusta",
+                "skip": "no"
+            },
+            {
+                "state": "Maryland",
+                "capital": "Annapolis",
+                "skip": "no"
+            },
+            {
+                "state": "Massachusetts",
+                "capital": "Boston",
+                "skip": "no"
+            },
+            {
+                "state": "Michigan",
+                "capital": "Lansing",
+                "skip": "no"
+            },
+            {
+                "state": "Minnesota",
+                "capital": "Saint Paul",
+                "skip": "no"
+            },
+            {
+                "state": "Mississippi",
+                "capital": "Jackson",
+                "skip": "no"
+            },
+            {
+                "state": "Missouri",
+                "capital": "Jefferson City",
+                "skip": "no"
+            },
+            {
+                "state": "Montana",
+                "capital": "Helena",
+                "skip": "no"
+            },
+            {
+                "state": "Nebraska",
+                "capital": "Lincoln",
+                "skip": "no"
+            },
+            {
+                "state": "Nevada",
+                "capital": "Carson City",
+                "skip": "no"
+            },
+            {
+                "state": "New Hampshire",
+                "capital": "Concord",
+                "skip": "no"
+            },
+            {
+                "state": "New Jersey",
+                "capital": "Trenton",
+                "skip": "no"
+            },
+            {
+                "state": "New Mexico",
+                "capital": "Santa Fe",
+                "skip": "no"
+            },
+            {
+                "state": "New York",
+                "capital": "Albany",
+                "skip": "no"
+            },
+            {
+                "state": "North Carolina",
+                "capital": "Raleigh",
+                "skip": "no"
+            },
+            {
+                "state": "North Dakota",
+                "capital": "Bismarck",
+                "skip": "no"
+            },
+            {
+                "state": "Ohio",
+                "capital": "Columbus",
+                "skip": "no"
+            },
+            {
+                "state": "Oklahoma",
+                "capital": "Oklahoma City",
+                "skip": "no"
+            },
+            {
+                "state": "Oregon",
+                "capital": "Salem",
+                "skip": "no"
+            },
+            {
+                "state": "Pennsylvania",
+                "capital": "Harrisburg",
+                "skip": "no"
+            },
+            {
+                "state": "Rhode Island",
+                "capital": "Providence",
+                "skip": "no"
+            },
+            {
+                "state": "South Carolina",
+                "capital": "Columbia",
+                "skip": "no"
+            },
+            {
+                "state": "South Dakota",
+                "capital": "Pierre",
+                "skip": "no"
+            },
+            {
+                "state": "Tennessee",
+                "capital": "Nashville",
+                "skip": "no"
+            },
+            {
+                "state": "Texas",
+                "capital": "Austin",
+                "skip": "no"
+            },
+            {
+                "state": "Utah",
+                "capital": "Salt Lake City",
+                "skip": "no"
+            },
+            {
+                "state": "Vermont",
+                "capital": "Montpelier",
+                "skip": "no"
+            },
+            {
+                "state": "Virginia",
+                "capital": "Richmond",
+                "skip": "no"
+            },
+            {
+                "state": "Washington",
+                "capital": "Olympia",
+                "skip": "no"
+            },
+            {
+                "state": "West Virginia",
+                "capital": "Charleston",
+                "skip": "no"
+            },
+            {
+                "state": "Wisconsin",
+                "capital": "Madison",
+                "skip": "no"
+            },
+            {
+                "state": "Wyoming",
+                "capital": "Cheyenne",
+                "skip": "no"
+            }
+        ]
+    }
+    
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">data_words.json</h2>
+            <div class="experience">
+                <pre><code>
+    {
+        "words": [
+            {
+                "word":"austere",
+                "part of speech": "adjective",
+                "definition": "severe or strict in manner, attitude, or appearance",
+                "sentence": "the cathedral is impressive in its austere simplicity",
+                "skip": "no"
+            },
+            {
+                "word":"gregarious",
+                "part of speech": "adjective",
+                "definition": "(of a person) fond of company; sociable.",
+                "sentence": "he was a popular and gregarious man",
+                "skip": "no"
+            }
+        ]
+    }
+    
                 </code></pre>
             </div>
         </div>

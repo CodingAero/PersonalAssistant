@@ -3,7 +3,6 @@
 # Brief description: This file is meant to provide a daily email
 #       in order to stay informed on various topics.
 # Author: Michael J. Smith
-# Created: July 06, 2022
 ##########################################################################
 
 # Import statements
