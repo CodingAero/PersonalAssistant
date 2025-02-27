@@ -1,0 +1,254 @@
+{
+    "states": [
+        {
+            "state": "Alabama",
+            "capital": "Montgomery",
+            "skip": "no"
+        },
+        {
+            "state": "Alaska",
+            "capital": "Juneau",
+            "skip": "no"
+        },
+        {
+            "state": "Arizona",
+            "capital": "Phoenix",
+            "skip": "no"
+        },
+        {
+            "state": "Arkansas",
+            "capital": "Little Rock",
+            "skip": "no"
+        },
+        {
+            "state": "California",
+            "capital": "Sacramento",
+            "skip": "no"
+        },
+        {
+            "state": "Colorado",
+            "capital": "Denver",
+            "skip": "no"
+        },
+        {
+            "state": "Connecticut",
+            "capital": "Hartford",
+            "skip": "no"
+        },
+        {
+            "state": "Delaware",
+            "capital": "Dover",
+            "skip": "no"
+        },
+        {
+            "state": "Florida",
+            "capital": "Tallahassee",
+            "skip": "no"
+        },
+        {
+            "state": "Georgia",
+            "capital": "Atlanta",
+            "skip": "no"
+        },
+        {
+            "state": "Hawaii",
+            "capital": "Honolulu",
+            "skip": "no"
+        },
+        {
+            "state": "Idaho",
+            "capital": "Boise",
+            "skip": "no"
+        },
+        {
+            "state": "Illinois",
+            "capital": "Springfield",
+            "skip": "no"
+        },
+        {
+            "state": "Indiana",
+            "capital": "Indianapolis",
+            "skip": "no"
+        },
+        {
+            "state": "Iowa",
+            "capital": "Des Moines",
+            "skip": "no"
+        },
+        {
+            "state": "Kansas",
+            "capital": "Topeka",
+            "skip": "no"
+        },
+        {
+            "state": "Kentucky",
+            "capital": "Frankfort",
+            "skip": "no"
+        },
+        {
+            "state": "Louisiana",
+            "capital": "Baton Rouge",
+            "skip": "no"
+        },
+        {
+            "state": "Maine",
+            "capital": "Augusta",
+            "skip": "no"
+        },
+        {
+            "state": "Maryland",
+            "capital": "Annapolis",
+            "skip": "no"
+        },
+        {
+            "state": "Massachusetts",
+            "capital": "Boston",
+            "skip": "no"
+        },
+        {
+            "state": "Michigan",
+            "capital": "Lansing",
+            "skip": "no"
+        },
+        {
+            "state": "Minnesota",
+            "capital": "Saint Paul",
+            "skip": "no"
+        },
+        {
+            "state": "Mississippi",
+            "capital": "Jackson",
+            "skip": "no"
+        },
+        {
+            "state": "Missouri",
+            "capital": "Jefferson City",
+            "skip": "no"
+        },
+        {
+            "state": "Montana",
+            "capital": "Helena",
+            "skip": "no"
+        },
+        {
+            "state": "Nebraska",
+            "capital": "Lincoln",
+            "skip": "no"
+        },
+        {
+            "state": "Nevada",
+            "capital": "Carson City",
+            "skip": "no"
+        },
+        {
+            "state": "New Hampshire",
+            "capital": "Concord",
+            "skip": "no"
+        },
+        {
+            "state": "New Jersey",
+            "capital": "Trenton",
+            "skip": "no"
+        },
+        {
+            "state": "New Mexico",
+            "capital": "Santa Fe",
+            "skip": "no"
+        },
+        {
+            "state": "New York",
+            "capital": "Albany",
+            "skip": "no"
+        },
+        {
+            "state": "North Carolina",
+            "capital": "Raleigh",
+            "skip": "no"
+        },
+        {
+            "state": "North Dakota",
+            "capital": "Bismarck",
+            "skip": "no"
+        },
+        {
+            "state": "Ohio",
+            "capital": "Columbus",
+            "skip": "no"
+        },
+        {
+            "state": "Oklahoma",
+            "capital": "Oklahoma City",
+            "skip": "no"
+        },
+        {
+            "state": "Oregon",
+            "capital": "Salem",
+            "skip": "no"
+        },
+        {
+            "state": "Pennsylvania",
+            "capital": "Harrisburg",
+            "skip": "no"
+        },
+        {
+            "state": "Rhode Island",
+            "capital": "Providence",
+            "skip": "no"
+        },
+        {
+            "state": "South Carolina",
+            "capital": "Columbia",
+            "skip": "no"
+        },
+        {
+            "state": "South Dakota",
+            "capital": "Pierre",
+            "skip": "no"
+        },
+        {
+            "state": "Tennessee",
+            "capital": "Nashville",
+            "skip": "no"
+        },
+        {
+            "state": "Texas",
+            "capital": "Austin",
+            "skip": "no"
+        },
+        {
+            "state": "Utah",
+            "capital": "Salt Lake City",
+            "skip": "no"
+        },
+        {
+            "state": "Vermont",
+            "capital": "Montpelier",
+            "skip": "no"
+        },
+        {
+            "state": "Virginia",
+            "capital": "Richmond",
+            "skip": "no"
+        },
+        {
+            "state": "Washington",
+            "capital": "Olympia",
+            "skip": "no"
+        },
+        {
+            "state": "West Virginia",
+            "capital": "Charleston",
+            "skip": "no"
+        },
+        {
+            "state": "Wisconsin",
+            "capital": "Madison",
+            "skip": "no"
+        },
+        {
+            "state": "Wyoming",
+            "capital": "Cheyenne",
+            "skip": "no"
+        }
+    ]
+}

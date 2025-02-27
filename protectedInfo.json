@@ -1,0 +1,10 @@
+{
+    "gmailPassword": {
+        "iPhone": "fakePassword",
+        "iPad": "fakePassword",
+        "Mac": "fakePassword",
+        "WindowsPhone": "fakePassword",
+        "WindowsComp": "fakePassword",
+        "Rasp": "fakePassword"
+    }
+}

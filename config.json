@@ -1,0 +1,10 @@
+{
+    "platform": "Mac",
+    "emailInTerminal": "True",
+    "verbose": "False",
+    "logFile": "log.txt",
+    "assistantName": "Winston",
+    "from_email": "assistant@gmail.com",
+    "to_email": "you@gmail.com",
+    "subject": "default"
+}
