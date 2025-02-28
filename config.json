@@ -3,8 +3,10 @@
     "emailInTerminal": "True",
     "verbose": "False",
     "logFile": "log.txt",
+    "yourName": "Mr. Smith",
     "assistantName": "Winston",
     "from_email": "assistant@gmail.com",
     "to_email": "you@gmail.com",
-    "subject": "default"
+    "subject": "default",
+    "eventOutlook": "14"
 }

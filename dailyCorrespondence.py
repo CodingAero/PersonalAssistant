@@ -36,6 +36,9 @@ with open('config.json', 'r') as file:
     # File path to the log file
     logFile = cnfg['logFile']
 
+    # This specifies how the assistant will refer to you
+    yourName = cnfg['yourName']
+    
     # This specifies how the assistant will refer to theirself
     assistantName = cnfg['assistantName']
 
