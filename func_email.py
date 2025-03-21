@@ -1,14 +1,17 @@
 # Import statements
+import datetime as datetime
+import func_general as g
+import func_statusLogging as sl
 import json
 import smtplib
-import datetime as datetime
-import func_statusLogging as sl
 
 ##########################################################################
 # Configuration
 ##########################################################################
 
-with open('config.json', 'r') as file:
+config_path = g.configPath()
+
+with open(config_path) as file:
     cnfg = json.loads(file.read())
     platform = cnfg['platform']
     emailInTerminal = cnfg['emailInTerminal'] == "True" # Bool conversion
@@ -45,7 +48,7 @@ def reportFindings(msg,verbose):
     smtpserver.ehlo()
     smtpserver.starttls()
     smtpserver.ehlo
-    smtpserver.login(from_email,get_pass(platform,verbose))
+    smtpserver.login(from_email,g.get_pass(platform,verbose))
     header = "To: " + to_email + "\nFrom: " + from_email
     header = header + "\nSubject: " + subject + "\n"
     URGENT_MESSAGE = header + "\n" + msg
@@ -53,22 +56,3 @@ def reportFindings(msg,verbose):
     smtpserver.close()
 
     return
-
-def get_pass(platform,verbose):
-    '''
-    Send correspondence via email
-
-    Input:
-        platform (str): Platform the program is running on
-        verbose (bool): Print additional terminal messages
-    Output:
-        pw (str): Gmail password for the requested platform
-    '''
-
-    if verbose: sl.progressMessage("Starting the 'get_pass' function.",verbose)
-
-    pw = ''
-    with open('protectedInfo.json', 'r') as file:
-        pInfo = json.loads(file.read())
-        pw = pInfo['gmailPassword'][platform]
-    return pw

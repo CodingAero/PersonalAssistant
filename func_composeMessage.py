@@ -1,17 +1,25 @@
 # Import statements
-import json
 import datetime as datetime
+import func_general as g
 import func_statusLogging as sl
+import json
 
 ##########################################################################
 # Configuration
 ##########################################################################
 
-with open('config.json', 'r') as file:
+config_path = g.configPath()
+
+with open(config_path) as file:
     cnfg = json.loads(file.read())
     yourName = cnfg['yourName']
     assistantName = cnfg['assistantName']
     eventOutlook = int(cnfg['eventOutlook'])
+    countriesFile = cnfg['countriesFile']
+    datesFile = cnfg['datesFile']
+    quotesFile = cnfg['quotesFile']
+    statesFile = cnfg['statesFile']
+    wordsFile = cnfg['wordsFile']
 
 ##########################################################################
 # Functions
@@ -57,8 +65,7 @@ def eventMessage(msg,verbose):
     msg = (msg + '\n\n' + 'Birthdays and Anniversaries:')
 
     # Read the JSON data from the file
-    path = r'data_dates.json'
-    with open(path, "r", encoding="utf-8") as file_handle:
+    with open(datesFile, "r", encoding="utf-8") as file_handle:
         data = json.load(file_handle)
 
     # Create an empty dictionary for days until celebration
@@ -272,23 +279,23 @@ def getStateCountry(verbose):
     departure = ""
     destination = ""
 
-    with open('history.json', 'r') as histFile:
-        hist = json.loads(histFile.read())
+    with open(config_path) as confFile:
+        conf = json.loads(confFile.read())
 
-    lastDeparture = hist['lastDeparture']
-    lastStateId = int(hist['lastStateId'])
-    lastCountryId = int(hist['lastCountryId'])
+    lastDeparture = conf['lastDeparture']
+    lastStateId = int(conf['lastStateId'])
+    lastCountryId = int(conf['lastCountryId'])
     
     if lastDeparture == "state":
         departureId = lastCountryId
-        hist['lastDeparture'] = "country"
-        hist['lastCountryId'] = str(departureId)
+        conf['lastDeparture'] = "country"
+        conf['lastCountryId'] = str(departureId)
     else:
         departureId = lastStateId
-        hist['lastDeparture'] = "state"
-        hist['lastStateId'] = str(departureId)
+        conf['lastDeparture'] = "state"
+        conf['lastStateId'] = str(departureId)
     
-    with open('data_states.json', 'r') as stateFile:
+    with open(statesFile) as stateFile:
         st = json.loads(stateFile.read())
         if lastDeparture == "state":
             searching = True
@@ -300,12 +307,12 @@ def getStateCountry(verbose):
                     searching = False
                 else:
                     destinationId += 1
-            hist['lastStateId'] = str(destinationId)
+            conf['lastStateId'] = str(destinationId)
             destination = "{0}, {1}".format(st["states"][destinationId]["capital"],st["states"][destinationId]["state"])
         else:
             departure = "{0}, {1}".format(st["states"][departureId]["capital"],st["states"][departureId]["state"])
             
-    with open('data_countries.json', 'r') as countryFile:
+    with open(countriesFile) as countryFile:
         cnrt = json.loads(countryFile.read())
         if lastDeparture == "state":
             departure = "{0}, {1}".format(cnrt["countries"][departureId]["capital"],cnrt["countries"][departureId]["short-form name"])
@@ -319,11 +326,11 @@ def getStateCountry(verbose):
                     searching = False
                 else:
                     destinationId += 1
-            hist['lastCountryId'] = str(destinationId)
+            conf['lastCountryId'] = str(destinationId)
             destination = "{0}, {1}".format(cnrt["countries"][destinationId]["capital"],cnrt["countries"][destinationId]["short-form name"])
     
-    with open('history.json', 'w') as histFile:
-        json.dump(hist, histFile, indent=4)
+    with open(config_path, 'w') as confFile:
+        json.dump(conf, confFile, indent=4)
     
     return departure,destination
 
@@ -342,13 +349,13 @@ def getWord(verbose):
 
     wotd = ""
 
-    with open('history.json', 'r') as histFile:
-        hist = json.loads(histFile.read())
+    with open(config_path) as confFile:
+        conf = json.loads(confFile.read())
 
-    lastWordId = int(hist['lastWordId'])
+    lastWordId = int(conf['lastWordId'])
             
-    with open('data_words.json', 'r') as wordsFile:
-        wrd = json.loads(wordsFile.read())
+    with open(wordsFile) as wrdFile:
+        wrd = json.loads(wrdFile.read())
 
         searching = True
         wordId = lastWordId + 1
@@ -359,11 +366,11 @@ def getWord(verbose):
                 searching = False
             else:
                 wordId += 1
-        hist['lastWordId'] = str(wordId)
+        conf['lastWordId'] = str(wordId)
         wotd = "{0} ({1}): {2}\nSentence: \"{3}\"".format(wrd["words"][wordId]["word"],wrd["words"][wordId]["part of speech"],wrd["words"][wordId]["definition"],wrd["words"][wordId]["sentence"])
     
-    with open('history.json', 'w') as histFile:
-        json.dump(hist, histFile, indent=4)
+    with open(config_path, 'w') as confFile:
+        json.dump(conf, confFile, indent=4)
     
     return wotd
 
@@ -382,13 +389,13 @@ def getQuote(verbose):
 
     qotd = ""
 
-    with open('history.json', 'r') as histFile:
-        hist = json.loads(histFile.read())
+    with open(config_path) as confFile:
+        conf = json.loads(confFile.read())
 
-    lastQuoteId = int(hist['lastQuoteId'])
+    lastQuoteId = int(conf['lastQuoteId'])
             
-    with open('data_quotes.json', 'r') as quotesFile:
-        qt = json.loads(quotesFile.read())
+    with open(quotesFile) as qtFile:
+        qt = json.loads(qtFile.read())
 
         searching = True
         quoteId = lastQuoteId + 1
@@ -399,10 +406,10 @@ def getQuote(verbose):
                 searching = False
             else:
                 quoteId += 1
-        hist['lastQuoteId'] = str(quoteId)
+        conf['lastQuoteId'] = str(quoteId)
         qotd = "{0} ({1})".format(qt["quotes"][quoteId]["quote"],qt["quotes"][quoteId]["author"])
     
-    with open('history.json', 'w') as histFile:
-        json.dump(hist, histFile, indent=4)
+    with open(config_path, 'w') as confFile:
+        json.dump(conf, confFile, indent=4)
     
     return qotd

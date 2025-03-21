@@ -1,13 +1,15 @@
 # Import statements
+import func_general as g
 import json
-import os
 from datetime import datetime
 
 ##########################################################################
 # Configuration
 ##########################################################################
 
-with open('config.json', 'r') as file:
+config_path = g.configPath()
+
+with open(config_path) as file:
     cnfg = json.loads(file.read())
     logFile = cnfg['logFile']
 

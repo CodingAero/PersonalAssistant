@@ -3,10 +3,20 @@
     "emailInTerminal": "True",
     "verbose": "False",
     "logFile": "log.txt",
-    "yourName": "Mr. Smith",
+    "countriesFile": "./data/data_countries.json",
+    "datesFile": "./data/data_dates.json",
+    "quotesFile": "./data/data_quotes.json",
+    "statesFile": "./data/data_states.json",
+    "wordsFile": "./data/data_words.json",
+    "yourName": "Smith",
     "assistantName": "Winston",
     "from_email": "assistant@gmail.com",
     "to_email": "you@gmail.com",
     "subject": "default",
-    "eventOutlook": "14"
+    "eventOutlook": "14",
+    "lastDeparture": "country",
+    "lastStateId": "0",
+    "lastCountryId": "0",
+    "lastWordId": "0",
+    "lastQuoteId": "0"
 }

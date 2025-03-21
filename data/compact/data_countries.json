@@ -1,0 +1,16 @@
+{
+    "countries": [
+        {
+            "short-form name": "Canada",
+            "long-form name": "Canada",
+            "capital": "Ottawa",
+            "skip": "no"
+        },
+        {
+            "short-form name": "United States",
+            "long-form name": "United States of America",
+            "capital": "Washington, DC",
+            "skip": "no"
+        }
+    ]
+}

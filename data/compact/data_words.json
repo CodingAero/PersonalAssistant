@@ -1,0 +1,18 @@
+{
+    "words": [
+        {
+            "word":"austere",
+            "part of speech": "adjective",
+            "definition": "severe or strict in manner, attitude, or appearance",
+            "sentence": "the cathedral is impressive in its austere simplicity",
+            "skip": "no"
+        },
+        {
+            "word":"gregarious",
+            "part of speech": "adjective",
+            "definition": "(of a person) fond of company; sociable.",
+            "sentence": "he was a popular and gregarious man",
+            "skip": "no"
+        }
+    ]
+}

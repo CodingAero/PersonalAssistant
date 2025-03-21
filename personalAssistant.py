@@ -1,5 +1,5 @@
 ##########################################################################
-# File: dailyCorrespondence.py
+# File: personalAssistant.py
 # Brief description: This file is meant to provide a daily email
 #       in order to stay informed on various topics.
 # Author: Michael J. Smith
@@ -8,16 +8,20 @@
 # Import statements
 import func_composeMessage as cm
 import func_email as em
+import func_general as g
 import func_statusLogging as sl
 import json
+import os
 from datetime import datetime
 
 ##########################################################################
 # Configuration
 ##########################################################################
 
+config_path = g.configPath(True)
+
 # Note: Find the configuration items in config.json
-with open('config.json', 'r') as file:
+with open(config_path) as file:
     cnfg = json.loads(file.read())
 
     # Specify the platform from which the script is being run.

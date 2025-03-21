@@ -1,0 +1,14 @@
+{
+    "states": [
+        {
+            "state": "Alabama",
+            "capital": "Montgomery",
+            "skip": "no"
+        },
+        {
+            "state": "Wyoming",
+            "capital": "Cheyenne",
+            "skip": "no"
+        }
+    ]
+}

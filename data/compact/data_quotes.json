@@ -1,0 +1,14 @@
+{
+    "quotes": [
+        {
+            "quote": "Keep your eyes on the stars, and your feet on the ground.",
+            "author": "Theodore Roosevelt",
+            "skip": "no"
+        },
+        {
+            "quote": "An expert is a person who has made all the mistakes that can be made in a very narrow field.",
+            "author": "Niels Bohr",
+            "skip": "no"
+        }
+    ]
+}
