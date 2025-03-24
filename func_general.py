@@ -14,7 +14,7 @@ def configPath(verbose=False):
 
     configs = {
         'mac':      '/Users/smith/local_config/personal_assistant.json',
-        'ubuntu':   '/home/smith/local_config/personal_assistant.json',
+        'ubuntu':   '/home/smith/Documents/Code/local_config/personal_assistant/personal_assistant.json',
         'default':  'config.json'
     }
 
@@ -47,7 +47,7 @@ def get_pass(platform,verbose):
 
     configs = {
         'mac':      '/Users/smith/local_config/email.json',
-        'ubuntu':   '/home/smith/local_config/email.json',
+        'ubuntu':   '/home/smith/Documents/Code/local_config/email.json',
         'default':  'protectedInfo.json'
     }
 
