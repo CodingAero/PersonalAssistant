@@ -43,8 +43,6 @@ def get_pass(platform,verbose):
         pw (str): Gmail password for the requested platform
     '''
 
-    if verbose: sl.progressMessage("Starting the 'get_pass' function.",verbose)
-
     configs = {
         'mac':      '/Users/smith/local_config/email.json',
         'ubuntu':   '/home/smith/Documents/Code/local_config/email.json',
