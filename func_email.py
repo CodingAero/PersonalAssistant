@@ -34,10 +34,15 @@ def save_html_email_to_file(html_content, filename=emailPreview):
     Save HTML email to a file for preview (without actually sending)
     """
     
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        if verbose: sl.progressMessage(f"HTML email preview saved to {filename}",verbose)
     
-    if verbose: sl.progressMessage(f"HTML email preview saved to {filename}")
+    except Exception as e:
+        if verbose: sl.errorMessage(f"Error saving HTML email preview: {str(e)}",verbose)
+    
+    return
 
 def reportFindings(html_content,verbose):
     '''
