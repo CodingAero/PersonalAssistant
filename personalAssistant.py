@@ -41,7 +41,7 @@ with open(config_path) as file:
     logFile = cnfg['logFile']
 
     # This specifies how the assistant will refer to you
-    yourName = cnfg['yourName']
+    greeting = cnfg['greeting']
     
     # This specifies how the assistant will refer to theirself
     assistantName = cnfg['assistantName']
@@ -59,9 +59,12 @@ sl.intializeLog()
 msg = cm.intializeMessage(verbose)
 
 # Expand the correspondence message
-msg = cm.eventMessage(msg, verbose)
+msg = cm.weatherMessage(msg,verbose)
 msg = cm.creditCardMessage(msg, verbose)
 msg = cm.trashRecyclingMessage(msg, verbose)
+msg = cm.eventMessage(msg, verbose)
+msg = cm.wordMessage(msg,verbose)
+msg = cm.quoteMessage(msg,verbose)
 
 # Clos the correspondence message
 msg = cm.valedictionMessage(msg, verbose)

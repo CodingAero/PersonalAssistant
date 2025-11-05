@@ -3,6 +3,7 @@ import datetime as datetime
 import func_general as g
 import func_statusLogging as sl
 import json
+import requests
 
 ##########################################################################
 # Configuration
@@ -12,7 +13,7 @@ config_path = g.configPath()
 
 with open(config_path) as file:
     cnfg = json.loads(file.read())
-    yourName = cnfg['yourName']
+    greeting = cnfg['greeting']
     assistantName = cnfg['assistantName']
     eventOutlook = int(cnfg['eventOutlook'])
     countriesFile = cnfg['countriesFile']
@@ -37,10 +38,168 @@ def intializeMessage(verbose):
 
     if verbose: sl.progressMessage("Starting the 'intializeMessage' function.",verbose)
     
-    msg = "{0},\n\n".format(yourName) + \
-        "Let me catch you up on some relevant information for today."
+    # msg = "{0},\n\n".format(greeting) + \
+    #     "Here is what you need to know."
+
+    msg = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" hs-webfonts="true" href="https://fonts.googleapis.com/css?family=Jura">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            h1{font-size:40px}
+            h2{font-size:20px;font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+            p{font-size:16px;font-weight:100}
+            td{vertical-align:top}
+            ul{list-style-type:square;list-style-position:outside;padding-left:10px}
+            ul li{font-size:16px;font-weight:100}
+            #email{margin:auto;width:600px;background-color: ghostwhite}
+        </style>
+    </head>
+    <body bgcolor="black" style="width: 100%; font-family:Jura; font-size:18px;">
+    <div id="email">
+        <table role="presentation" width="100%">
+            <tr>
+                <td bgcolor="#67b57e" align="center" style="color: black;">
+                    <h1>''' + str(datetime.datetime.now().strftime("%A")) + '''</h1>
+                    <p>''' + str(datetime.datetime.now().strftime("%B %d, %Y")) + '''</p>
+                </td>
+        </table>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="10px" style="padding: 10px 10px 10px 20px;">
+            <tr>
+                <td>
+                    <p>
+                        ''' + str(greeting) + ''',
+                    </p>
+                    <p>
+                        Here is what you need to know.
+                    </p>'''
 
     return str(msg)
+
+def get_weather():
+    """
+    Get weather from National Weather Service (US only)
+    Free, no API key needed
+    """
+    # Get the forecast office and grid coordinates
+    point_url = f"https://api.weather.gov/points/40.0379,-105.0528"
+    headers = {
+        "User-Agent": "WeatherApp",
+        "Accept": "application/json"
+        }
+    
+    point_response = requests.get(point_url, headers=headers)
+    point_data = point_response.json()
+    
+    # Get the forecast URL
+    forecast_url = point_data['properties']['forecast']
+    
+    forecast_response = requests.get(forecast_url, headers=headers)
+    forecast_data = forecast_response.json()
+    
+    # Today's forecast
+    today = forecast_data['properties']['periods'][0]
+
+    return(today['detailedForecast'])
+
+def weatherMessage(msg,verbose):
+    '''
+    Appends a weather forecast to the correspondence message
+
+    Input:
+        msg (str): Text forming the body of the email correspondence
+        verbose (bool): Print additional terminal messages
+    Output:
+        msg (str): Text forming the body of the email correspondence
+    '''
+
+    if verbose: sl.progressMessage("Starting the 'weatherMessage' function.",verbose)
+
+    now = datetime.datetime.now()
+    begin_alert = 5 # Day of the month, inclusive
+    end_alert = 12 # Day of the month, inclusive
+    
+    if (int(now.strftime("%d")) >= begin_alert) and (int(now.strftime("%d")) <= end_alert):
+        msg = msg + '''
+                    <h2>Weather</h2>
+                        <p>
+                            ''' + str(get_weather()) + '''
+                        </p>'''
+
+    return msg
+
+def creditCardMessage(msg,verbose):
+    '''
+    Appends upcoming credit card due date information to the correspondence message
+
+    Input:
+        msg (str): Text forming the body of the email correspondence
+        verbose (bool): Print additional terminal messages
+    Output:
+        msg (str): Text forming the body of the email correspondence
+    '''
+
+    if verbose: sl.progressMessage("Starting the 'creditCardMessage' function.",verbose)
+
+    now = datetime.datetime.now()
+    begin_alert = 5 # Day of the month, inclusive
+    end_alert = 12 # Day of the month, inclusive
+    
+    if (int(now.strftime("%d")) >= begin_alert) and (int(now.strftime("%d")) <= end_alert):
+        msg = msg + '''
+                    <h2>Credit Card</h2>
+                        <p>
+                            Time to pay your credit card.
+                        </p>'''
+
+    return msg
+
+def trashRecyclingMessage(msg,verbose):
+    '''
+    Appends upcoming trash and recycling day information to the correspondence message
+
+    Input:
+        msg (str): Text forming the body of the email correspondence
+        verbose (bool): Print additional terminal messages
+    Output:
+        msg (str): Text forming the body of the email correspondence
+    '''
+
+    if verbose: sl.progressMessage("Starting the 'trashRecyclingMessage' function.",verbose)
+
+    now = datetime.datetime.now()
+    
+    if (now.isocalendar()[1] % 2) > 0: # Alternating recycling weeks
+        if now.weekday() == 0: # Monday
+            msg = msg + '''
+                    <h2>Trash/Recycling</h2>
+                        <p>
+                            Tomorrow is trash day.
+                        </p>'''
+        elif now.weekday() == 1: # Tuesday
+            msg = msg + '''
+                    <h2>Trash/Recycling</h2>
+                        <p>
+                            It is trash day.
+                        </p>'''
+    else:
+        if now.weekday() == 0: # Monday
+            msg = msg + '''
+                    <h2>Trash/Recycling</h2>
+                        <p>
+                            Tomorrow is a trash and recycling day.
+                        </p>'''
+        elif now.weekday() == 1: # Tuesday
+            msg = msg + '''
+                    <h2>Trash/Recycling</h2>
+                        <p>
+                            It is a trash and recycling day.
+                        </p>'''
+
+    return msg
 
 def eventMessage(msg,verbose):
     '''
@@ -62,7 +221,10 @@ def eventMessage(msg,verbose):
     today = datetime.datetime.now().replace(hour = 0, minute = 0, second = 0, microsecond = 0)
 
     # Add to message
-    msg = (msg + '\n\n' + 'Birthdays and Anniversaries:')
+    msg = msg + '''
+                    <h2>Birthdays/Anniversaries</h2>
+                        <p>
+                            <ul>'''
 
     # Read the JSON data from the file
     with open(datesFile, "r", encoding="utf-8") as file_handle:
@@ -174,22 +336,29 @@ def eventMessage(msg,verbose):
         if key == '0':
             for i in days_until[key]:
                 # print("Today is " + str(i))
-                msg = (msg + '\n' + 'Today is ' + str(i))
+                msg = msg + '''
+                            <li>Today is ''' + str(i) + '''</li>'''
         elif key == '1':
             for i in days_until[key]:
                 # print("Tomorrow is " + str(i))
-                msg = (msg + '\n' + 'Tomorrow is ' + str(i))
+                msg = msg + '''
+                            <li>Tomorrow is ''' + str(i) + '''</li>'''
         else:
             for i in days_until[key]:
                 date = (today + datetime.timedelta(days=int(key))).strftime("%A, %B %d")
                 # print("In " + str(key) + " days, on " + str(date) + ", it will be " + str(i))
-                msg = (msg + '\n' + 'In ' + str(key) + ' days, on ' + str(date) + ', it will be ' + str(i))
+                msg = msg + '''
+                            <li>In ''' + str(key) + ''' days, on ''' + str(date) + ''', it will be ''' + str(i) + '''</li>'''
+
+    msg = msg + '''
+                        </ul>
+                    </p>'''
 
     return msg
 
-def creditCardMessage(msg,verbose):
+def wordMessage(msg,verbose):
     '''
-    Appends upcoming credit card due date information to the correspondence message
+    Add word of the day
 
     Input:
         msg (str): Text forming the body of the email correspondence
@@ -198,20 +367,19 @@ def creditCardMessage(msg,verbose):
         msg (str): Text forming the body of the email correspondence
     '''
 
-    if verbose: sl.progressMessage("Starting the 'creditCardMessage' function.",verbose)
+    if verbose: sl.progressMessage("Starting the 'wordMessage' function.",verbose)
 
-    now = datetime.datetime.now()
-    begin_alert = 5 # Day of the month, inclusive
-    end_alert = 12 # Day of the month, inclusive
-    
-    if (int(now.strftime("%d")) >= begin_alert) and (int(now.strftime("%d")) <= end_alert):
-        msg = (msg + '\n\n' + 'Credit Card:' + '\n' + 'Time to pay your credit card.')
+    msg = msg + '''
+                    <h2>Word of the Day</h2>
+                        <p>
+                            ''' + getWord(verbose) + '''
+                        </p>'''
 
     return msg
 
-def trashRecyclingMessage(msg,verbose):
+def quoteMessage(msg,verbose):
     '''
-    Appends upcoming trash and recycling day information to the correspondence message
+    Add quote of the day
 
     Input:
         msg (str): Text forming the body of the email correspondence
@@ -220,20 +388,13 @@ def trashRecyclingMessage(msg,verbose):
         msg (str): Text forming the body of the email correspondence
     '''
 
-    if verbose: sl.progressMessage("Starting the 'trashRecyclingMessage' function.",verbose)
-
-    now = datetime.datetime.now()
+    if verbose: sl.progressMessage("Starting the 'quoteMessage' function.",verbose)
     
-    if (now.isocalendar()[1] % 2) > 0: # Alternating recycling weeks
-        if now.weekday() == 0: # Monday
-            msg = (msg + '\n\n' + 'Trash/Recycling:' + '\n' + 'Tomorrow is trash day.')
-        elif now.weekday() == 1: # Tuesday
-            msg = (msg + '\n\n' + 'Trash/Recycling:' + '\n' + 'It is trash day.')
-    else:
-        if now.weekday() == 0: # Monday
-            msg = (msg + '\n\n' + 'Trash/Recycling:' + '\n' + 'Tomorrow is a trash and recycling day.')
-        elif now.weekday() == 1: # Tuesday
-            msg = (msg + '\n\n' + 'Trash/Recycling:' + '\n' + 'It is a trash and recycling day.')
+    msg = msg + '''
+                    <h2>Quote of the Day</h2>
+                        <p>
+                            ''' + getQuote(verbose) + '''
+                        </p>'''
 
     return msg
 
@@ -252,13 +413,24 @@ def valedictionMessage(msg,verbose):
 
     departure,destination = getStateCountry(verbose)
 
-    msg_addition = "Sincerely, {0}\n\n".format(assistantName) + \
-        "In route from {0} to {1}.\n\n".format(departure, destination) + \
-        "Word of the day:\n" + \
-        getWord(verbose) + "\n\n" + \
-        "Quote of the day:\n" + \
-        getQuote(verbose)
-    msg = msg + "\n\n" + msg_addition
+    msg = msg + '''
+                </td>
+            </tr>
+        </table>
+        <table role="presentation" width="100%">
+            <tr>
+                <td bgcolor="#67b57e" align="center" style="color: black;">
+                    <p>
+                        Winston
+                    </p>
+                    <p>
+                        In route from ''' + str(departure) + ''' to ''' + str(destination) + '''.
+                    </p>
+                </td>
+        </table>
+    </div>
+    </body>
+</html>'''
 
     return msg
 
@@ -367,7 +539,7 @@ def getWord(verbose):
             else:
                 wordId += 1
         conf['lastWordId'] = str(wordId)
-        wotd = "{0} ({1}): {2}\nSentence: \"{3}\"".format(wrd["words"][wordId]["word"],wrd["words"][wordId]["part of speech"],wrd["words"][wordId]["definition"],wrd["words"][wordId]["sentence"])
+        wotd = "{0} ({1}): {2}<br>Sentence: \"{3}\"".format(wrd["words"][wordId]["word"],wrd["words"][wordId]["part of speech"],wrd["words"][wordId]["definition"],wrd["words"][wordId]["sentence"])
     
     with open(config_path, 'w') as confFile:
         json.dump(conf, confFile, indent=4)
@@ -407,7 +579,7 @@ def getQuote(verbose):
             else:
                 quoteId += 1
         conf['lastQuoteId'] = str(quoteId)
-        qotd = "{0} ({1})".format(qt["quotes"][quoteId]["quote"],qt["quotes"][quoteId]["author"])
+        qotd = "{0}<br>~{1}".format(qt["quotes"][quoteId]["quote"],qt["quotes"][quoteId]["author"])
     
     with open(config_path, 'w') as confFile:
         json.dump(conf, confFile, indent=4)

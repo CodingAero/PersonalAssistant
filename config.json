@@ -8,7 +8,7 @@
     "quotesFile": "./data/data_quotes.json",
     "statesFile": "./data/data_states.json",
     "wordsFile": "./data/data_words.json",
-    "yourName": "Smith",
+    "greeting": "Smith",
     "assistantName": "Winston",
     "from_email": "assistant@gmail.com",
     "to_email": "you@gmail.com",

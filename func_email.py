@@ -4,6 +4,8 @@ import func_general as g
 import func_statusLogging as sl
 import json
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 ##########################################################################
 # Configuration
@@ -26,12 +28,22 @@ with open(config_path) as file:
 # Functions
 ##########################################################################
 
-def reportFindings(msg,verbose):
+def save_html_email_to_file(html_content, filename="email_preview.html"):
+    """
+    Save HTML email to a file for preview (without actually sending)
+    """
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print(f"HTML email preview saved to {filename}")
+
+def reportFindings(html_content,verbose):
     '''
     Send correspondence via email
 
     Input:
-        msg (str): Text forming the body of the email correspondence
+        html_content (str): Text forming the body of the email correspondence
         verbose (bool): Print additional terminal messages
     Output:
         n/a
@@ -44,15 +56,36 @@ def reportFindings(msg,verbose):
     if subject == "default":
         subject = "Daily Correspondence ({0})".format(datetime.datetime.now().strftime("%Y-%m-%d"))
 
-    smtpserver = smtplib.SMTP("smtp.gmail.com",587)
-    smtpserver.ehlo()
-    smtpserver.starttls()
-    smtpserver.ehlo
-    smtpserver.login(from_email,g.get_pass(platform,verbose))
-    header = "To: " + to_email + "\nFrom: " + from_email
-    header = header + "\nSubject: " + subject + "\n"
-    URGENT_MESSAGE = header + "\n" + msg
-    smtpserver.sendmail(from_email,to_email,URGENT_MESSAGE)
-    smtpserver.close()
+    save_html_email_to_file(html_content, filename="email_preview.html")
 
-    return
+    try:
+        # Create SMTP session
+        server = smtplib.SMTP("smtp.gmail.com",587)
+        server.starttls()  # Enable TLS encryption
+        server.login(from_email, g.get_pass(platform,verbose))
+
+        # Create message container
+        msg = MIMEMultipart('related')
+        msg['From'] = from_email
+        msg['To'] = to_email
+        msg['Subject'] = subject
+        
+        # Create the HTML part
+        html_part = MIMEMultipart('alternative')
+        html_mime = MIMEText(html_content, 'html')
+        html_part.attach(html_mime)
+        
+        # Attach HTML part to main message
+        msg.attach(html_part)
+        
+        # Send email
+        text = msg.as_string()
+        server.sendmail(from_email, to_email, text)
+        server.quit()
+        
+        print("Email sent successfully!")
+        return True
+        
+    except Exception as e:
+        print(f"Error sending email: {str(e)}")
+        return False
