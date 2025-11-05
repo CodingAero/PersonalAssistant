@@ -19,6 +19,7 @@ with open(config_path) as file:
     emailInTerminal = cnfg['emailInTerminal'] == "True" # Bool conversion
     verbose = cnfg['verbose'] == "True" # Bool conversion
     logFile = cnfg['logFile']
+    emailPreview = cnfg['emailPreview']
     assistantName = cnfg['assistantName']
     from_email = cnfg['from_email']
     to_email = cnfg['to_email']
@@ -28,7 +29,7 @@ with open(config_path) as file:
 # Functions
 ##########################################################################
 
-def save_html_email_to_file(html_content, filename="email_preview.html"):
+def save_html_email_to_file(html_content, filename=emailPreview):
     """
     Save HTML email to a file for preview (without actually sending)
     """
@@ -83,9 +84,9 @@ def reportFindings(html_content,verbose):
         server.sendmail(from_email, to_email, text)
         server.quit()
         
-        print("Email sent successfully!")
+        if verbose: sl.progressMessage("Email sent successfully!",verbose)
         return True
         
     except Exception as e:
-        print(f"Error sending email: {str(e)}")
+        if verbose: sl.errorMessage(f"Error sending email: {str(e)}",verbose)
         return False

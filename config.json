@@ -3,6 +3,7 @@
     "emailInTerminal": "True",
     "verbose": "False",
     "logFile": "log.txt",
+    "emailPreview": "email_preview.html",
     "countriesFile": "./data/data_countries.json",
     "datesFile": "./data/data_dates.json",
     "quotesFile": "./data/data_quotes.json",
