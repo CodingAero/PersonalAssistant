@@ -37,7 +37,7 @@ def save_html_email_to_file(html_content, filename=emailPreview):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    print(f"HTML email preview saved to {filename}")
+    if verbose: sl.progressMessage(f"HTML email preview saved to {filename}")
 
 def reportFindings(html_content,verbose):
     '''
@@ -57,7 +57,7 @@ def reportFindings(html_content,verbose):
     if subject == "default":
         subject = "Daily Correspondence ({0})".format(datetime.datetime.now().strftime("%Y-%m-%d"))
 
-    save_html_email_to_file(html_content, filename="email_preview.html")
+    save_html_email_to_file(html_content, filename=emailPreview)
 
     try:
         # Create SMTP session
