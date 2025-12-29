@@ -10,6 +10,7 @@ import func_composeMessage as cm
 import func_email as em
 import func_general as g
 import func_statusLogging as sl
+import func_weather as w
 import json
 import os
 from datetime import datetime
@@ -59,7 +60,7 @@ sl.intializeLog()
 msg = cm.intializeMessage(verbose)
 
 # Expand the correspondence message
-msg = cm.weatherMessage(msg,verbose)
+msg = w.forecastMessage(msg,verbose)
 msg = cm.creditCardMessage(msg, verbose)
 msg = cm.trashRecyclingMessage(msg, verbose)
 msg = cm.eventMessage(msg, verbose)

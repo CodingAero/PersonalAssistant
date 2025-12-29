@@ -2,6 +2,7 @@
 import datetime as datetime
 import func_general as g
 import func_statusLogging as sl
+import func_weather as w
 import json
 import requests
 
@@ -38,8 +39,7 @@ def intializeMessage(verbose):
 
     if verbose: sl.progressMessage("Starting the 'intializeMessage' function.",verbose)
     
-    # msg = "{0},\n\n".format(greeting) + \
-    #     "Here is what you need to know."
+    temp_current, temp_max, temp_min = w.getTemperature(verbose)
 
     msg = '''
 <!DOCTYPE html>
@@ -65,6 +65,7 @@ def intializeMessage(verbose):
                 <td bgcolor="#67b57e" align="center" style="color: black;">
                     <h1>''' + str(datetime.datetime.now().strftime("%A")) + '''</h1>
                     <p>''' + str(datetime.datetime.now().strftime("%B %d, %Y")) + '''</p>
+                    <p>''' + str(temp_current) + '''°F (High ''' + str(temp_max) + '''°F - Low ''' + str(temp_min) + '''°F)</p>
                 </td>
         </table>
         <table role="presentation" border="0" cellpadding="0" cellspacing="10px" style="padding: 10px 10px 10px 20px;">
@@ -78,58 +79,6 @@ def intializeMessage(verbose):
                     </p>'''
 
     return str(msg)
-
-def get_weather():
-    """
-    Get weather from National Weather Service (US only)
-    Free, no API key needed
-    """
-    # Get the forecast office and grid coordinates
-    point_url = f"https://api.weather.gov/points/40.0379,-105.0528"
-    headers = {
-        "User-Agent": "WeatherApp",
-        "Accept": "application/json"
-        }
-    
-    point_response = requests.get(point_url, headers=headers)
-    point_data = point_response.json()
-    
-    # Get the forecast URL
-    forecast_url = point_data['properties']['forecast']
-    
-    forecast_response = requests.get(forecast_url, headers=headers)
-    forecast_data = forecast_response.json()
-    
-    # Today's forecast
-    today = forecast_data['properties']['periods'][0]
-
-    return(today['detailedForecast'])
-
-def weatherMessage(msg,verbose):
-    '''
-    Appends a weather forecast to the correspondence message
-
-    Input:
-        msg (str): Text forming the body of the email correspondence
-        verbose (bool): Print additional terminal messages
-    Output:
-        msg (str): Text forming the body of the email correspondence
-    '''
-
-    if verbose: sl.progressMessage("Starting the 'weatherMessage' function.",verbose)
-
-    now = datetime.datetime.now()
-    begin_alert = 5 # Day of the month, inclusive
-    end_alert = 12 # Day of the month, inclusive
-    
-    if (int(now.strftime("%d")) >= begin_alert) and (int(now.strftime("%d")) <= end_alert):
-        msg = msg + '''
-                    <h2>Weather</h2>
-                        <p>
-                            ''' + str(get_weather()) + '''
-                        </p>'''
-
-    return msg
 
 def creditCardMessage(msg,verbose):
     '''
