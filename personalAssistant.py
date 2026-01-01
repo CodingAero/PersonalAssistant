@@ -9,6 +9,7 @@
 import func_composeMessage as cm
 import func_email as em
 import func_general as g
+import func_github as gh
 import func_statusLogging as sl
 import func_weather as w
 import json
@@ -76,6 +77,8 @@ if emailInTerminal:
     print(msg)
 else:
     em.reportFindings(msg, verbose)
+
+gh.update_and_push_logs("Personal Assistant program completed successfully.")
 
 # Print a final message to screen
 end_time = datetime.now()
