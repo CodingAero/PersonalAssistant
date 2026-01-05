@@ -13,7 +13,7 @@ def configPath(verbose=False):
     '''
 
     configs = {
-        'windows':  'C:/Users/smith/OneDrive/Documents/Code/local_config/personal_assistant/personal_assistant.json',
+        'windows':  'C:/Users/smith/LocalConfig/PersonalAssistant/personal_assistant.json',
         'mac':      '/Users/smith/local_config/personal_assistant.json',
         'ubuntu':   '/home/smith/Documents/Code/local_config/personal_assistant/personal_assistant.json',
         'default':  'config.json'
@@ -45,7 +45,7 @@ def get_pass(platform,verbose):
     '''
 
     configs = {
-        'windows':  'C:/Users/smith/OneDrive/Documents/Code/local_config/personal_assistant/email.json',
+        'windows':  'C:/Users/smith/LocalConfig/PersonalAssistant/email.json',
         'mac':      '/Users/smith/local_config/email.json',
         'ubuntu':   '/home/smith/Documents/Code/local_config/email.json',
         'default':  'protectedInfo.json'

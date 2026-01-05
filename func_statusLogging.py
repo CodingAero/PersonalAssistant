@@ -31,7 +31,7 @@ def intializeLog():
         with open(logFile, 'w') as f:
             f.write("Program initialized: {0}".format(datetime.now()))
     except Exception as e:
-        errorMessage(f"An error occurred initializing the log file: {e}")
+        errorMessage(f"An error occurred initializing the log file: {e}",verbose=True)
     
     return
 
