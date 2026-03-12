@@ -1,4 +1,4 @@
-Program initialized: 2026-03-12 08:49:49.786322
+Program initialized: 2026-03-12 08:52:24.441990
 
 Running windows configuration.
 
@@ -10,7 +10,6 @@ Function call: sendEmail
 
 sendEmail: Retrieved message content
 
-FAILED TO SEND MESSAGE
-    Error: (550, b'5.7.1 This message is not RFC 5322 compliant. There are multiple Subject\n5.7.1 headers. To reduce the amount of spam sent to Gmail, this message has\n5.7.1 been blocked. For more information, go to\n5.7.1  https://support.google.com/mail/?p=RfcMessageNonCompliant and review\n5.7.1 RFC 5322 specifications. af79cd13be357-8cda210daa1sm356755585a.26 - gsmtp')
+sendEmail: Email sent successfully!
 
 Successful program execution in 0 second(s).
