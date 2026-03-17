@@ -1,86 +1,67 @@
 ##########################################################################
-# File: personalAssistant.py
-# Brief description: This file is meant to provide a daily email
-#       in order to stay informed on various topics.
-# Author: Michael J. Smith
+# Description:
+#       This file is meant to provide a daily email in order to stay 
+#       informed on various topics such as weather and events.
 ##########################################################################
 
-# Import statements
-import func_composeMessage as cm
-import func_email as em
-import func_general as g
-import func_github as gh
-import func_statusLogging as sl
-import func_weather as w
-import json
-import os
+import creditcard as credit
+import event
+import github as gh
+import logger as log
+import message
+import quote
+import sendEmail as email
+import startup as start
+import trashRecycling as trash
+import weather
+import word
+
 from datetime import datetime
 
-##########################################################################
-# Configuration
-##########################################################################
+def main():
+    # Log the start time of the program
+    start_time = datetime.now()
 
-config_path = g.configPath(True)
+    # Get the configuration items
+    config = start.get_config()
 
-# Note: Find the configuration items in config.json
-with open(config_path) as file:
-    cnfg = json.loads(file.read())
+    #Initialize log file
+    log.intializeLog(config)
 
-    # Specify the platform from which the script is being run.
-    # Gmail access requires the use of an 'App Password'
-    # Passwords have been generated for the following platforms:
-    # 'iPhone','iPad','Mac','WindowsPhone','WindowsComp','Rasp'
-    platform  = cnfg['platform']
+    # Determine temperature information for the message header
+    current_temp,high_temp,low_temp = weather.getTemperatures(config)
 
-    # Toggle to True if you prefer the email is printed within the terminal
-    # window rather than being sent as an actual email.
-    emailInTerminal = cnfg['emailInTerminal'] == "True" # Bool conversion
+    # Initialize the correspondence message
+    message.intializeMessage(config,current_temp,high_temp,low_temp)
 
-    # Toggle print messages
-    verbose = cnfg['verbose'] == "True" # Bool conversion
+    # Expand the correspondence message
+    try:
+        weather.forecastMessage(config)
+        credit.creditcardMessage(config)
+        trash.trashRecyclingMessage(config)
+        event.eventMessage(config)
+        word.wordMessage(config)
+        quote.quoteMessage(config)
+    except Exception as e:
+        log.note(config,f"FAILED TO EXPAND MESSAGE\n    Error: {e}")
 
-    # File path to the log file
-    logFile = cnfg['logFile']
+    # Close the correspondence message
+    message.closeMessage(config)
 
-    # This specifies how the assistant will refer to you
-    greeting = cnfg['greeting']
-    
-    # This specifies how the assistant will refer to theirself
-    assistantName = cnfg['assistantName']
+    # Send email
+    email.sendEmail(config)
 
-##########################################################################
-# Program logic
-##########################################################################
+    # Log final execution time
+    end_time = datetime.now()
+    execution_time = end_time - start_time
+    log.note(config,f"Successful program execution in {0} second(s).".format(execution_time.total_seconds()))
+    print("Program completed successfully.")
 
-start_time = datetime.now()
+    # Attempt to push log to GitHub
+    try:
+        gh.githubLog(config)
+    except Exception as e:
+        log.note(config,f"FAILED TO LOG ON GITHUB\n    Error: {e}")
 
-#Initialize log file
-sl.intializeLog()
-
-# Initialize the correspondence message
-msg = cm.intializeMessage(verbose)
-
-# Expand the correspondence message
-msg = w.forecastMessage(msg,verbose)
-msg = cm.creditCardMessage(msg, verbose)
-msg = cm.trashRecyclingMessage(msg, verbose)
-msg = cm.eventMessage(msg, verbose)
-msg = cm.wordMessage(msg,verbose)
-msg = cm.quoteMessage(msg,verbose)
-
-# Clos the correspondence message
-msg = cm.valedictionMessage(msg, verbose)
-
-# Print email in terminal vs send email
-sl.infoMessage("Final correspondence message\n{0}".format(msg),verbose)
-if emailInTerminal:
-    print(msg)
-else:
-    em.reportFindings(msg, verbose)
-
-gh.update_and_push_logs("Personal Assistant program completed successfully.")
-
-# Print a final message to screen
-end_time = datetime.now()
-execution_time = end_time - start_time
-sl.infoMessage("Successful program execution in {0} second(s).".format(execution_time.total_seconds()),verbose)
+if __name__ == "__main__":
+    main()
