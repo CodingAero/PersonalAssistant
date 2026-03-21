@@ -12,6 +12,7 @@ import message
 import quote
 import sendEmail as email
 import startup as start
+import tax
 import trashRecycling as trash
 import weather
 import word
@@ -40,6 +41,7 @@ def main():
         credit.creditcardMessage(config)
         trash.trashRecyclingMessage(config)
         event.eventMessage(config)
+        tax.taxMessage(config)
         word.wordMessage(config)
         quote.quoteMessage(config)
     except Exception as e:
