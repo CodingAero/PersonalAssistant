@@ -11,6 +11,7 @@ import logger as log
 import message
 import quote
 import sendEmail as email
+import skylight
 import startup as start
 import tax
 import trashRecycling as trash
@@ -42,6 +43,7 @@ def main():
         trash.trashRecyclingMessage(config)
         event.eventMessage(config)
         tax.taxMessage(config)
+        skylight.skylightMessage(config)
         word.wordMessage(config)
         quote.quoteMessage(config)
     except Exception as e:
