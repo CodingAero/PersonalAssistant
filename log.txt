@@ -1,4 +1,4 @@
-Program initialized: 2026-03-20 20:02:29.167932
+Program initialized: 2026-03-20 20:04:19.362896
 
 Running Mac configuration.
 
@@ -32,7 +32,9 @@ Function call: taxMessage
 
 taxMessage: First quarter tax payment is due on April 15.
 
-taxMessage: Fourth quarter tax payment is due on January 15.
+taxMessage: Second quarter tax payment is due on June 15.
+
+taxMessage: Third quarter tax payment is due on September 15.
 
 Function call: appendMessage
 
