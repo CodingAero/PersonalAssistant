@@ -1,4 +1,4 @@
-Program initialized: 2026-03-20 19:32:13.960830
+Program initialized: 2026-03-20 19:58:18.067697
 
 Running Mac configuration.
 
@@ -28,13 +28,10 @@ Function call: eventMessage
 
 Function call: appendMessage
 
-Function call: wordMessage
+Function call: taxMessage
 
-Function call: appendMessage
-
-Function call: quoteMessage
-
-Function call: appendMessage
+FAILED TO EXPAND MESSAGE
+    Error: local variable 'msg' referenced before assignment
 
 Function call: closeMessage
 
