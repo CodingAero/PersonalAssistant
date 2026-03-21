@@ -1,16 +1,18 @@
-Program initialized: 2026-03-20 05:00:01.915070
+Program initialized: 2026-03-20 19:29:28.893788
 
-Running windows configuration.
+Running Mac configuration.
 
 Function call: getTemperatures
+
+getTemperatures: FAILED TO GET TEMPERATURES
+    Error: 'latitude'
 
 Function call: intializeMessage
 
 Function call: forecastMessage
 
-forecastMessage: Adding weather forecast information
-
-Function call: appendMessage
+forecastMessage: FAILED TO GET FORECAST
+    Error: 'latitude'
 
 Function call: creditcardMessage
 
