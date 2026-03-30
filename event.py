@@ -121,7 +121,9 @@ def eventMessage(config):
                     for e in days_until[str(days_remaining)]:
                         temp_list.append(e)
                     new_event = str(event['name']) + "."
-                    if missing_year == False and not monthiversary:
+                    if missing_year == False and not monthiversary and str('half birthday') in new_event.lower():
+                        new_event += " (" + str(years) + ".5)"
+                    elif missing_year == False and not monthiversary:
                         new_event += " (" + str(years) + ")"
                     if monthiversary:
                         new_event += " (" + str(month_count) + " months)"
