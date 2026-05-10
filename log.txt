@@ -1,8 +1,11 @@
-Program initialized: 2026-05-09 05:00:02.377892
+Program initialized: 2026-05-10 05:00:02.492709
 
 Running windows configuration.
 
 Function call: getTemperatures
+
+getTemperatures: FAILED TO GET TEMPERATURES
+    Error: Expecting value: line 1 column 1 (char 0)
 
 Function call: intializeMessage
 
